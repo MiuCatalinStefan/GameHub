@@ -11,7 +11,8 @@ namespace GameHub.Models
         [Required]
         public required string Title { get; set; }
         public double Price { get; set; }
-        public Uri? Image {  get; set; }
+        public Uri? Image { get; set; }
         public List<Category> Categories { get; set; } = [];
+        public List<ShoppingCart> ShoppingCarts { get; set; } = [];
     }
 }
