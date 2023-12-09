@@ -24,7 +24,9 @@
             <h5 class="card-title fw-bold mb-0">@obj.Title</h5>
             <h6>@obj.Price.ToString("F2") $</h6>
             <div class="d-flex w-100 mb-2 justify-content-between">
-                <a asp-controller="Product" asp-action="DetailProduct" asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
+                <a  asp-controller="Product" 
+                    asp-action="DetailProduct" 
+                    asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
                 <button class="btn btn-danger">Add to cart</button>
             </div>
         </div>
