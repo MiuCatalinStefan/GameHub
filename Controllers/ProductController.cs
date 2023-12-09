@@ -1,4 +1,5 @@
-﻿using GameHub.Data;
+﻿using GameHub.CRUD;
+using GameHub.Data;
 using GameHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
@@ -7,27 +8,24 @@ using System.Diagnostics;
 
 namespace GameHub.Controllers
 {
-    public class ProductController(ApplicationDbContext db) : Controller
+    public class ProductController(IProductCRUD productCRUD, ICategoryCRUD categoryCRUD) : Controller
     {
-        private readonly ApplicationDbContext _db = db;
+        private readonly IProductCRUD _productCRUD = productCRUD;
+        private readonly ICategoryCRUD _categoryCRUD = categoryCRUD;
 
-        public IActionResult Index(string title)
+        // this one should match ProductSorting enum
+        private static readonly List<string> orderLabels = [
+            "None",
+            "Price Ascending",
+            "Price Descending"
+        ];
+
+        public IActionResult Index(string title, string selectedCategoryName)
         {
-            Debug.Print(title);
-            List<Product> products = [];
-
-            if (title.IsNullOrEmpty())
-            {
-                Debug.Print("it failed");
-                products = [.. _db.Products];
-            }
-            else
-            {
-                Debug.Print("it worked");
-                products = [.. _db.Products.Where(t => t.Title.Contains(title))];
-            }
-
-            return View((products, title));
+            Debug.Print(selectedCategoryName);
+            List<Product> products = _productCRUD.Get(title, selectedCategoryName);
+            List<Category> allCategories = _categoryCRUD.GetAll();
+            return View((products, allCategories, title, selectedCategoryName, orderLabels));
         }
     }
 }

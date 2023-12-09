@@ -1,19 +1,16 @@
 ﻿using GameHub.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 
 namespace GameHub.Data
 {
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :  DbContext(options)
     {
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Product>()
-                .HasMany(t => t.Categories)
-                .WithMany(t => t.Products)
-                .UsingEntity(t => t.ToTable("ProductCategoryContract"));
-
             modelBuilder.Entity<Product>().HasData(
                 new { Id = 1, Title = "GTA 6", Description = "Gotcha! Coming in 2025 only for Ps5", Price = 90.0,
                 Image = new Uri("https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244") },
@@ -32,8 +29,27 @@ namespace GameHub.Data
                 new { Id = 3, Name = "Action" },
                 new { Id = 4, Name = "Strategy" },
                 new { Id = 5, Name = "Third Person Shooter" },
-                new { Id = 6, Name = "First Person Shooter" }
+                new { Id = 6, Name = "First Person Shooter" },
+                new { Id = 7, Name = "Racing" }
                 );
+
+            modelBuilder.Entity<Product>()
+                .HasMany(t => t.Categories)
+                .WithMany(t => t.Products)
+                .UsingEntity(t =>
+                {
+                    t.ToTable("ProductCategoryContract");
+                    t.HasData(
+                        new { ProductsId = 1, CategoriesId = 1 },
+                        new { ProductsId = 1, CategoriesId = 5 },
+                        new { ProductsId = 2, CategoriesId = 3 },
+                        new { ProductsId = 2, CategoriesId = 6 },
+                        new { ProductsId = 3, CategoriesId = 3 },
+                        new { ProductsId = 4, CategoriesId = 3 },
+                        new { ProductsId = 5, CategoriesId = 7 },
+                        new { ProductsId = 6, CategoriesId = 2 }
+                        );
+                });
         }
     }
 }
