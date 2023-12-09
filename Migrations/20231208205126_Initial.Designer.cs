@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231207181400_AddingCategory")]
-    partial class AddingCategory
+    [Migration("20231208205126_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,6 +37,48 @@ namespace GameHub.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("ProductCategoryContract", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            CategoriesId = 1,
+                            ProductsId = 1
+                        },
+                        new
+                        {
+                            CategoriesId = 5,
+                            ProductsId = 1
+                        },
+                        new
+                        {
+                            CategoriesId = 3,
+                            ProductsId = 2
+                        },
+                        new
+                        {
+                            CategoriesId = 6,
+                            ProductsId = 2
+                        },
+                        new
+                        {
+                            CategoriesId = 3,
+                            ProductsId = 3
+                        },
+                        new
+                        {
+                            CategoriesId = 3,
+                            ProductsId = 4
+                        },
+                        new
+                        {
+                            CategoriesId = 7,
+                            ProductsId = 5
+                        },
+                        new
+                        {
+                            CategoriesId = 2,
+                            ProductsId = 6
+                        });
                 });
 
             modelBuilder.Entity("GameHub.Models.Category", b =>
@@ -53,7 +95,7 @@ namespace GameHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
 
                     b.HasData(
                         new
@@ -85,6 +127,11 @@ namespace GameHub.Migrations
                         {
                             Id = 6,
                             Name = "First Person Shooter"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "Racing"
                         });
                 });
 
