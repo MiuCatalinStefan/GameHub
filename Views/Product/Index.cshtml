@@ -1,0 +1,32 @@
+﻿@model (List<Product> products, string title)
+
+<h1>Products List</h1>
+
+<form asp-controller="Product" asp-action="Index" method="get">
+    <div class="input-group">
+        <input type="text" class="form-control w-75" placeholder="Title name" name="title" value="@Model.title" />
+        <input class="btn btn-primary" type="submit" value="Filter"/>
+    </div>
+</form>
+
+<div class="row row-cols-3 justify-content-around gap-3 mt-4">
+    @foreach (var obj in Model.products)
+    {
+        <div class="card shadow-lg rounded-3" style="width: 18rem;">
+            @if (obj.Image != null)
+            {
+                <img src="@obj.Image?.ToString()" style="height: 12rem" />
+            }
+            else
+            {
+                <img src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715" style="height: 12rem" />
+            }
+            <h5 class="card-title fw-bold mb-0">@obj.Title</h5>
+            <h6>@obj.Price.ToString("F2") $</h6>
+            <div class="d-flex w-100 mb-2 justify-content-between">
+                <a href="#" class="btn btn-primary">Description</a>
+                <button class="btn btn-danger">Add to cart</button>
+            </div>
+        </div>
+    }
+</div>
