@@ -37,7 +37,8 @@ namespace GameHub.Controllers
             Debug.Print(id.ToString());
             List<Product> products = [.. _db.Products];
             Product product = products.Where(p => p.Id == id).First();
-            if (product != null) {
+            if (product != null) 
+            {
                 Debug.Print("product displayed!");
                 return View((id, ProductDto.MapProductToDto(product)));
             } else {

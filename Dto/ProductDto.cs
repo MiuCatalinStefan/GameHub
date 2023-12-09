@@ -1,5 +1,6 @@
 ﻿using GameHub.Models;
 using GameHub.Utils;
+using PlatformEnum = GameHub.Utils.Platform;
 
 namespace GameHub.Dto
 {
@@ -16,7 +17,7 @@ namespace GameHub.Dto
         public string? MinOperatingSystem { get; set; }
         public string? RecomandedOperatingSystem { get; set; }
 
-        public static ProductDto MapPrToDto(Product p)
+        public static ProductDto MapProductToDto(Product p)
         {
             return new ProductDto
             {
@@ -28,8 +29,8 @@ namespace GameHub.Dto
                 Video = p.Video,
                 Platform = PlatformValue.getPlatformName(p.Platform),
                 Stock = p.Stock,
-                MinOperatingSystem = p.MinOperatingSystem != null ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.MinOperatingSystem) : null,
-                RecomandedOperatingSystem = p.RecomandedOperatingSystem != null ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.RecomandedOperatingSystem) : null
+                MinOperatingSystem = (p.Platform == PlatformEnum.PC && p.MinOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.MinOperatingSystem) : null,
+                RecomandedOperatingSystem = (p.Platform == PlatformEnum.PC && p.RecomandedOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.RecomandedOperatingSystem) : null
             };
         }
     }
