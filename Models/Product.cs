@@ -24,5 +24,22 @@ namespace GameHub.Models
         public OperatingSystem? MinOperatingSystem { get; set; }
         public OperatingSystem? RecomandedOperatingSystem { get; set; }
         public List<ShoppingCartProduct> ShoppingCartProducts { get; set; } = [];
+        [Required]
+        public required string ReleaseDate { get; set; }
+        [Required]
+        public required string Producer {  get; set; }
+        [Required]
+        public required List<string> AvailableLanguages { get; set; } = ["english"];
+        public int? RecomandedAge {  get; set; }
+        [Required]
+        public required string MultiplayerInfo {  get; set; }
+        public Processor? MinProcessor {  get; set; }
+        public Processor? RecomandedProcessor { get; set; }
+        public Graphic? MinGraphic { get; set; }
+        public Graphic? RecomandedGraphic { get; set; }
+        public RamMemory? MinRam { get; set; }
+        public RamMemory? RecomandedRam { get; set; }
+        public int? StorageMemory { get; set; } // GB
+
     }
 }

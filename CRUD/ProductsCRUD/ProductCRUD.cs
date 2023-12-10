@@ -1,5 +1,6 @@
 ﻿using GameHub.Data;
 using GameHub.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameHub.CRUD.ProductsCRUD
@@ -25,12 +26,17 @@ namespace GameHub.CRUD.ProductsCRUD
 
             return products;
         }
-
+       
         public List<Product> GetAll()
         {
             List<Product> products = [.. _db.Products];
 
             return products;
+        }
+
+        public List<Product> GetAllProductsWithCategories()
+        {
+            return [.. _db.Products.Include(p => p.Categories)];
         }
     }
 }

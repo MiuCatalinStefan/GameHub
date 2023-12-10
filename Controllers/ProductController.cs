@@ -37,18 +37,35 @@ namespace GameHub.Controllers
         public IActionResult DetailProduct(int id)
         {
             Debug.Print(id.ToString());
-            List<Product> products = _productCRUD.GetAll();
-            Product product = products.Where(p => p.Id == id).First();
-            if (product != null)
+            List<Product> products = _productCRUD.GetAllProductsWithCategories();
+            if (id != 0)
             {
-                Debug.Print("product displayed!");
-                return View((id, ProductDto.MapProductToDto(product)));
+                Product product = products.Where(p => p.Id == id).First();                
+                if (product != null)
+                {
+                    Debug.Print("product displayed!");
+                    ProductDto productDto = ProductDto.MapProductToDto(product);
+                    List<ProductDto> relatedProducts = RelatedProductsBasedOnCategory(product.Categories, products);
+                    return View((id, productDto, relatedProducts));
+                }
+                else
+                {
+                    Debug.Print("exception");
+                    throw new Exception("No product with this id");
+                }
             }
-            else
+            return null;
+        }
+
+        public List<ProductDto> RelatedProductsBasedOnCategory(List<Category> categories, List<Product> allProducts)
+        {
+            List<Product> products = allProducts.Where(p => p.Categories.Any(c => categories.Contains(c))).ToList();
+            List<ProductDto> productDtos = products.Select(p => ProductDto.GetPartialProductDto(p)).ToList();
+            if (productDtos.Count > 0)
             {
-                Debug.Print("exception");
-                throw new Exception("No product with this id");
+                return productDtos;
             }
+            return [];
         }
     }
 
