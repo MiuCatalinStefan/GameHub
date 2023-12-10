@@ -4,6 +4,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210174415_AddDataMembersForProduct")]
+    partial class AddDataMembersForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -334,19 +337,13 @@ namespace GameHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -628,17 +625,6 @@ namespace GameHub.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("GameHub.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("GameHub.Models.ShoppingCartProduct", b =>
                 {
                     b.HasOne("GameHub.Models.Product", "Product")
@@ -717,11 +703,6 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("GameHub.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,22 +1,221 @@
-﻿@model (int id, ProductDto product)
+﻿@model (int id, ProductDto product, List<ProductDto> relatedProdcuts)
 
-<h1>Product details</h1>
 
-<ol>
-    <li>title: @Model.product.Title</li>
-    <li>price: @Model.product.Price</li>
-    @if (@Model.product.Image != null)
-    {
-    <li>img: @Model.product.Image</li>
-    }
-    <li>platform: @Model.product.Platform</li>
-    @if (@Model.product.Video != null)
-    {
-        <li>video: @Model.product.Video</li>
-    }
-    @if (@Model.product.MinOperatingSystem != null)
-    {
-        <li>os: @Model.product.MinOperatingSystem</li>
-    }
-</ol>
+<div class="container-lg container-fluid mt-5" style="background-color: grey">
+    <div class="row">
+        <div class="col-4 d-flex justify-content-center">
+            <img class="mt-3 mb-3" src="@Model.product.Image?.ToString()" style="height: 25rem; width: 20rem;">
+        </div>
+        <div class="col-4">
+            <h2 class="mt-3">@Model.product.Title (@Model.product.Platform)</h2>
+            <p>@Model.product.Description</p>
+            <div class="row align-items-center mb-2">
+                <div class="col col-sm-6 mb-1" ">
+                    <strong>Producer</strong> <h4><span class="badge bg-warning">@Model.product.Producer</span></h4>
+                </div>
+                <div class="col col-sm-6 mb-2">
+                    <strong>Release date</strong> <h4><span class="badge bg-warning">@Model.product.ReleaseDate</span></h4>
+                </div>
+                <div class="col col-sm-6 mb-2">
+                    <strong>Minimum age</strong> <h4><span class="badge bg-success">+@Model.product.RecomandedAge</span></h4>
+                </div>
+                <div class="col col-sm-6 mb-2">
+                    <strong>Multiplayer</strong> <h4><span class="badge bg-success">@Model.product.MultiplayerInfo</span></h4>
+                </div>
+                <div class="col-12 mb-3">
+                    <strong>
+                        Available languages
+                    </strong>
+                    @foreach (var lang in Model.product.AvailableLanguages)
+                    {
+                        <span class="badge bg-primary">@lang</span>
+                    }
+                </div>
+            </div>
+            @if (Model.product.Categories.Count > 0)
+            {
+                <div class="col-12">
+                    <strong><h4>Game's categories</h4></strong>
+                    @foreach (var categ in Model.product.Categories)
+                    {
+                        <h5><span class="badge bg-danger">@categ</span></h5>
+                    }
+                </div>
+            }
+
+        </div>
+        <div class="col-4 d-flex justify-content-center">
+            <div class="card mt-3 mb-3" style="width: 20rem;">
+                <img src="@Model.product.Image" class="card-img-top" style="height: 5rem; width: 5rem">
+                <div class="card-body d-flex flex-column">
+                    <h1 class="card-title align-self-center"><span class="badge bg-secondary">@Model.product.Price $</span></h1>
+                    <section class="d-flex align-items-center gap-1 mb-2">
+                        @if (Model.product.Stock > 0)
+                        {
+                            <h4 class="m-0"><span class="badge bg-success">In stock</span></h4>
+                            <strong><p class="m-0">@Model.product.Stock products available</p></strong>
+
+                        } else
+                        {
+                            <h4 class="m-0"><span class="badge bg-danger align-content-center">Out of stock</span></h4>
+                            <strong><p class="m-0">0 products available</p></strong>
+                        }
+                    </section>
+                    <p class="card-text">100% positive feedback | <i class="bi bi-bag-check"></i> 342</p>
+                    <button type="button" class="btn btn-primary mb-2" @(Model.product.Stock == 0 ? "disabled" : "")>Add to cart</button>
+                    <a href="#" class="btn btn-danger mb-2">Add to wishlist</a>
+                    <button type="button" class="btn btn-outline-primary" @(Model.product.Stock == 0 ? "disabled" : "")>Buy now</button>
+                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-lg container-fluid mt-5">
+
+    <div class="accordion" id="accordionPanelsStayOpenExample">
+        @if (Model.product.Platform == "PC")
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                        <strong>System requirements</strong>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+
+                        <table class="table table-striped-columns table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Minimum</th>
+                                    <th>Recomanded</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Operating System
+                                        <span class="badge bg-success">@Model.product.MinOperatingSystem</span>
+                                    </td>
+                                    <td>
+                                        Operating System
+                                        <span class="badge bg-success">@Model.product.RecomandedOperatingSystem</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Processor
+                                        <span class="badge bg-success">@Model.product.MinProcessor</span>
+                                    </td>
+                                    <td>
+                                        Processor
+                                        <span class="badge bg-success">@Model.product.RecomandedProcessor</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Graphic
+                                        <span class="badge bg-success">@Model.product.MinGraphic</span>
+                                    </td>
+                                    <td>
+                                        Graphic
+                                        <span class="badge bg-success">@Model.product.RecomandedGraphic</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        RAM
+                                        <span class="badge bg-success">@Model.product.MinRam</span>
+                                    </td>
+                                    <td>
+                                        RAM
+                                        <span class="badge bg-success">@Model.product.RecomandedRam</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Storage memory
+                                        <span class="badge bg-success">@Model.product.StorageMemory GB available space</span>
+                                    </td>
+                                    <td>
+                                        Storage memory
+                                        <span class="badge bg-success">@Model.product.StorageMemory GB available space</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (Model.product.Video != null)
+        {
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                        <strong>Video</strong>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                    <div class="accordion-body">
+                        <img class="mt-3" src="@Model.product.Video.ToString()" style="height: 16rem" />
+                    </div>
+                </div>
+            </div>     
+        }
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    <strong>Reviews</strong>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                <div class="accordion-body">
+                    <strong>To be implemented ...</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    <strong>Other products you may like</strong>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <div class="row">
+                        @foreach (var p in Model.relatedProdcuts)
+                        {
+                            <div class="col-4">
+                                <div class="card mb-3" style="max-width: 300px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img src="@p.Image" class="img-fluid rounded-start" alt="">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body">
+                                                <h5 class="card-title">@p.Title</h5>
+                                                <p class="card-text">@p.Platform</p>
+                                                <p class="card-text">@p.Price $</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                             
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 

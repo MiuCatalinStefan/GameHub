@@ -4,6 +4,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210114710_AddMoreDataMembersForProduct")]
+    partial class AddMoreDataMembersForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -152,16 +155,7 @@ namespace GameHub.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MinGraphic")
-                        .HasColumnType("int");
-
                     b.Property<int?>("MinOperatingSystem")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MinProcessor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MinRam")
                         .HasColumnType("int");
 
                     b.Property<string>("MultiplayerInfo")
@@ -181,16 +175,7 @@ namespace GameHub.Migrations
                     b.Property<int?>("RecomandedAge")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecomandedGraphic")
-                        .HasColumnType("int");
-
                     b.Property<int?>("RecomandedOperatingSystem")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RecomandedProcessor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RecomandedRam")
                         .HasColumnType("int");
 
                     b.Property<string>("ReleaseDate")
@@ -198,9 +183,6 @@ namespace GameHub.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Stock")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StorageMemory")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -228,7 +210,6 @@ namespace GameHub.Migrations
                             RecomandedAge = 17,
                             ReleaseDate = "12 october 2025",
                             Stock = 0,
-                            StorageMemory = 100,
                             Title = "GTA 6"
                         },
                         new
@@ -236,14 +217,13 @@ namespace GameHub.Migrations
                             Id = 2,
                             AvailableLanguages = "[\"English\",\"French\",\"German\"]",
                             Description = "This game is not a metro simulator",
-                            MultiplayerInfo = "only single player",
+                            MultiplayerInfo = "No multiplayer - Single player experience",
                             Platform = 3,
                             Price = 30.0,
                             Producer = "Deep Silver",
                             RecomandedAge = 15,
                             ReleaseDate = "30 june 2019",
                             Stock = 23,
-                            StorageMemory = 60,
                             Title = "Metro Exodus"
                         },
                         new
@@ -259,7 +239,6 @@ namespace GameHub.Migrations
                             RecomandedAge = 12,
                             ReleaseDate = "2 may 2014",
                             Stock = 13,
-                            StorageMemory = 50,
                             Title = "Assassin's Creed Unity"
                         },
                         new
@@ -268,14 +247,13 @@ namespace GameHub.Migrations
                             AvailableLanguages = "[\"English\",\"French\",\"German\",\"Japanese\",\"Turkish\"]",
                             Description = "The second best assassin's creed game",
                             Image = "https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png",
-                            MultiplayerInfo = "only single player",
+                            MultiplayerInfo = "No multiplayer - only single player experience",
                             Platform = 4,
                             Price = 40.0,
                             Producer = "Ubisoft Connect",
                             RecomandedAge = 12,
                             ReleaseDate = "18 december 2017",
                             Stock = 10,
-                            StorageMemory = 89,
                             Title = "Assassin's Creed Origin"
                         },
                         new
@@ -284,21 +262,14 @@ namespace GameHub.Migrations
                             AvailableLanguages = "[\"English\",\"French\",\"German\",\"Japanese\",\"Turkish\"]",
                             Description = "Racing game",
                             Image = "https://image.api.playstation.com/cdn/EP0001/CUSA00161_00/f0kLJbch2vDawClFcF6k9LzZ7Ohi9a7n.png",
-                            MinGraphic = 2,
                             MinOperatingSystem = 1,
-                            MinProcessor = 2,
-                            MinRam = 16,
                             MultiplayerInfo = "Co-op: up to 32 players",
                             Platform = 5,
                             Price = 15.0,
                             Producer = "Ubisoft",
-                            RecomandedGraphic = 4,
                             RecomandedOperatingSystem = 4,
-                            RecomandedProcessor = 1,
-                            RecomandedRam = 32,
                             ReleaseDate = "22 july 2020",
                             Stock = 23,
-                            StorageMemory = 88,
                             Title = "The Crew"
                         },
                         new
@@ -306,22 +277,15 @@ namespace GameHub.Migrations
                             Id = 6,
                             AvailableLanguages = "[\"English\"]",
                             Description = "This doesn't need a description",
-                            MinGraphic = 1,
                             MinOperatingSystem = 1,
-                            MinProcessor = 4,
-                            MinRam = 8,
-                            MultiplayerInfo = "Public server",
+                            MultiplayerInfo = "Public server - no limit for players",
                             Platform = 5,
                             Price = 25.0,
                             Producer = "Sandbox",
                             RecomandedAge = 4,
-                            RecomandedGraphic = 3,
                             RecomandedOperatingSystem = 4,
-                            RecomandedProcessor = 5,
-                            RecomandedRam = 16,
                             ReleaseDate = "8 january 2010",
                             Stock = 6,
-                            StorageMemory = 7,
                             Title = "Minecraft"
                         });
                 });
@@ -334,19 +298,13 @@ namespace GameHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -628,17 +586,6 @@ namespace GameHub.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("GameHub.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ShoppingCarts")
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("GameHub.Models.ShoppingCartProduct", b =>
                 {
                     b.HasOne("GameHub.Models.Product", "Product")
@@ -717,11 +664,6 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("GameHub.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

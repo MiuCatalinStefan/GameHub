@@ -13,7 +13,7 @@ namespace GameHub.Data
       
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartProduct> ShoppingCartProducts { get; set; }
-      
+
       
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
@@ -55,6 +55,12 @@ namespace GameHub.Data
                     Image = new Uri("https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244"),
                     Platform = Platform.PS5,
                     Stock = 0,
+                    ReleaseDate = "12 october 2025",
+                    Producer = "Rockstar",
+                    AvailableLanguages = new List<string> {"English", "French", "German", "Japanese"},
+                    RecomandedAge = 17,
+                    MultiplayerInfo = "Co-op: 1-30 players",
+                    StorageMemory = 100
                 },
                 new
                 {
@@ -63,7 +69,13 @@ namespace GameHub.Data
                     Description = "This game is not a metro simulator",
                     Price = 30.0,
                     Platform = Platform.XBOX,
-                    Stock = 23
+                    Stock = 23,
+                    ReleaseDate = "30 june 2019",
+                    Producer = "Deep Silver",
+                    AvailableLanguages = new List<string> { "English", "French", "German"},
+                    RecomandedAge = 15,
+                    MultiplayerInfo = "only single player",
+                    StorageMemory = 60
                 },
                 new
                 {
@@ -74,6 +86,13 @@ namespace GameHub.Data
                     Image = new Uri("https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg"),
                     Platform = Platform.PS4,
                     Stock = 13,
+                    ReleaseDate = "2 may 2014",
+                    Producer = "Ubisoft Connect",
+                    AvailableLanguages = new List<string> { "English", "French", "German" },
+                    RecomandedAge = 12,
+                    MultiplayerInfo = "Co-op: 2-4 players",
+                    StorageMemory = 50
+
                 },
                 new
                 {
@@ -84,7 +103,12 @@ namespace GameHub.Data
                     Image = new Uri("https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png"),
                     Platform = Platform.NINTENDO,
                     Stock = 10,
-
+                    ReleaseDate = "18 december 2017",
+                    Producer = "Ubisoft Connect",
+                    AvailableLanguages = new List<string> { "English", "French", "German" , "Japanese", "Turkish" },
+                    RecomandedAge = 12,
+                    MultiplayerInfo = "only single player",
+                    StorageMemory = 89
                 },
                 new
                 {
@@ -96,7 +120,18 @@ namespace GameHub.Data
                     Platform = Platform.PC,
                     Stock = 23,
                     MinOperatingSystem = OperatingSystem.Windows10_64Bit,
-                    RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit
+                    RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit,
+                    ReleaseDate = "22 july 2020",
+                    Producer = "Ubisoft",
+                    AvailableLanguages = new List<string> { "English", "French", "German", "Japanese", "Turkish" },
+                    MultiplayerInfo = "Co-op: up to 32 players",
+                    MinProcessor = Processor.IntelCore2,
+                    RecomandedProcessor = Processor.IntelCoreI5,
+                    MinGraphic = Graphic.GTX780,
+                    RecomandedGraphic = Graphic.RTX2080,
+                    MinRam = RamMemory.RAM16,
+                    RecomandedRam = RamMemory.RAM32,
+                    StorageMemory = 88
                 },
                 new
                 {
@@ -107,7 +142,19 @@ namespace GameHub.Data
                     Platform = Platform.PC,
                     Stock = 6,
                     MinOperatingSystem = OperatingSystem.Windows10_64Bit,
-                    RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit
+                    RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit,
+                    ReleaseDate = "8 january 2010",
+                    Producer = "Sandbox",
+                    AvailableLanguages = new List<string> { "English"},
+                    RecomandedAge = 4,
+                    MultiplayerInfo = "Public server",
+                    MinProcessor = Processor.AmdRyzen5,
+                    RecomandedProcessor = Processor.AmdRyzen7,
+                    MinGraphic = Graphic.DX10,
+                    RecomandedGraphic = Graphic.RadeonRx470,
+                    MinRam = RamMemory.RAM8,
+                    RecomandedRam = RamMemory.RAM16,
+                    StorageMemory = 7
                 }
             );
 

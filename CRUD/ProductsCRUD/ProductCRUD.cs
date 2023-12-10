@@ -1,5 +1,6 @@
 ﻿using GameHub.Data;
 using GameHub.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 namespace GameHub.CRUD.ProductsCRUD
@@ -39,6 +40,11 @@ namespace GameHub.CRUD.ProductsCRUD
         public void Update(Product product)
         {
             _db.Products.Update(product);
+        }
+
+        public List<Product> GetAllProductsWithCategories()
+        {
+            return [.. _db.Products.Include(p => p.Categories)];
         }
     }
 }

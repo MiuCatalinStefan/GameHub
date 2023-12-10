@@ -25,27 +25,49 @@ namespace GameHub.Controllers
 
         public IActionResult Index(string title, string selectedCategoryName)
         {
-            Debug.Print(selectedCategoryName);
-            List<Product> products = _unitOfWork.Product.GetFiltered(title, selectedCategoryName);
-            List<Category> allCategories = _unitOfWork.Category.GetAll().ToList();
+            List<ProductListMemberDto> products = _unitOfWork.Product.GetFiltered(title, selectedCategoryName)
+                .Select(ProductListMemberDto.MapProductToDto)
+                .ToList();
+
+            List<CategoryDto> allCategories = _unitOfWork.Category.GetAll()
+                .Select(CategoryDto.MapCategoryToDto)
+                .ToList();
+
             return View((products, allCategories, title, selectedCategoryName, orderLabels));
         }
 
         public IActionResult DetailProduct(int id)
         {
             Debug.Print(id.ToString());
-            List<Product> products = _unitOfWork.Product.GetAll().ToList();
-            Product product = products.Where(p => p.Id == id).First();
-            if (product != null)
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Category").ToList();
+            if (id != 0)
             {
-                Debug.Print("product displayed!");
-                return View((id, ProductDto.MapProductToDto(product)));
+                Product product = products.Where(p => p.Id == id).First();                
+                if (product != null)
+                {
+                    Debug.Print("product displayed!");
+                    ProductDto productDto = ProductDto.MapProductToDto(product);
+                    List<ProductDto> relatedProducts = RelatedProductsBasedOnCategory(product.Categories, products);
+                    return View((id, productDto, relatedProducts));
+                }
+                else
+                {
+                    Debug.Print("exception");
+                    throw new Exception("No product with this id");
+                }
             }
-            else
+            return null;
+        }
+
+        public List<ProductDto> RelatedProductsBasedOnCategory(List<Category> categories, List<Product> allProducts)
+        {
+            List<Product> products = allProducts.Where(p => p.Categories.Any(c => categories.Contains(c))).ToList();
+            List<ProductDto> productDtos = products.Select(p => ProductDto.GetPartialProductDto(p)).ToList();
+            if (productDtos.Count > 0)
             {
-                Debug.Print("exception");
-                throw new Exception("No product with this id");
+                return productDtos;
             }
+            return [];
         }
     }
 
