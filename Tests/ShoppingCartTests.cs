@@ -1,6 +1,7 @@
-﻿using GameHub.CRUD.ShoppingCartsCRUD;
-using GameHub.Data;
+﻿using GameHub.Data;
 using GameHub.Dto;
+using GameHub.Dto.DtoServices;
+using GameHub.Dto.DtoServices.IDtoServices;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Xunit;
@@ -9,7 +10,7 @@ namespace GameHub.Tests
 {
     public class ShoppingCartTests
     {
-        private readonly IShoppingCartCRUD? _shoppingCartCRUD;
+        private readonly IServiceShoppingCart? _shoppingCartCRUD;
 
         public ShoppingCartTests()
         {
@@ -18,19 +19,19 @@ namespace GameHub.Tests
             var serviceProvider = new ServiceCollection()
                 .AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")))
-                .AddTransient<IShoppingCartCRUD, ShoppingCartCRUD>()
+                .AddScoped<IServiceShoppingCart, ServiceShoppingCart>()
                 .BuildServiceProvider();
 
-            _shoppingCartCRUD = serviceProvider.GetService<IShoppingCartCRUD>();
+            _shoppingCartCRUD = serviceProvider.GetService<IServiceShoppingCart>();
         }
 
         [Fact]
         public void TestGetShoppingCart()
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
-            ShoppingCartDto expected = new ShoppingCartDto();
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto();
 
-            ShoppingCartDto actual = _shoppingCartCRUD.Get(userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.Get(userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);
@@ -43,7 +44,7 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 6;
-            ShoppingCartDto expected = new ShoppingCartDto() 
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto() 
             {
                 UserId = userId,
                 TotalPrice = 25
@@ -57,7 +58,7 @@ namespace GameHub.Tests
             };
             expected.Products.Add(expectedProduct);
 
-            ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);
@@ -70,9 +71,9 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 6;
-            ShoppingCartDto expected = new ShoppingCartDto();
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto();
 
-            ShoppingCartDto actual = _shoppingCartCRUD.DeleteProduct(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.DeleteProduct(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);
@@ -86,7 +87,7 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 6;
-            ShoppingCartDto expected = new ShoppingCartDto()
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto()
             {
                 UserId = userId,
                 TotalPrice = 50
@@ -101,7 +102,7 @@ namespace GameHub.Tests
 
             expected.Products.Add(expectedProduct);
 
-            ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);
@@ -116,7 +117,7 @@ namespace GameHub.Tests
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId1 = 6;
             int productId2 = 5;
-            ShoppingCartDto expected = new ShoppingCartDto()
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto()
             {
                 UserId = userId,
                 TotalPrice = 40
@@ -139,7 +140,7 @@ namespace GameHub.Tests
             expected.Products.Add(expectedProduct1);
             expected.Products.Add(expectedProduct2);
 
-            ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId1, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId1, userId);
             actual = _shoppingCartCRUD.AddProduct(productId2, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
@@ -155,9 +156,9 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 1;
-            ShoppingCartDto expected = new ShoppingCartDto() { };
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto() { };
 
-            ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);
@@ -171,7 +172,7 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 6;
-            ShoppingCartDto expected = new ShoppingCartDto()
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto()
             {
                 UserId = userId,
                 TotalPrice = 50
@@ -184,7 +185,7 @@ namespace GameHub.Tests
                 Quantity = 2
             };
 
-            ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.AddProduct(productId, userId);
             actual = _shoppingCartCRUD.IncreaseQuantity(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
@@ -198,7 +199,7 @@ namespace GameHub.Tests
         {
             string userId = "823e8260-efb3-44a9-8467-780993d1dc7c";
             int productId = 6;
-            ShoppingCartDto expected = new ShoppingCartDto()
+            Dto.ShoppingCartDto expected = new Dto.ShoppingCartDto()
             {
                 UserId = userId,
                 TotalPrice = 25
@@ -211,7 +212,7 @@ namespace GameHub.Tests
                 Quantity = 1
             };
 
-            ShoppingCartDto actual = _shoppingCartCRUD.DecreaseQuantity(productId, userId);
+            Dto.ShoppingCartDto actual = _shoppingCartCRUD.DecreaseQuantity(productId, userId);
 
             var objExpected = JsonConvert.SerializeObject(expected);
             var objActual = JsonConvert.SerializeObject(actual);

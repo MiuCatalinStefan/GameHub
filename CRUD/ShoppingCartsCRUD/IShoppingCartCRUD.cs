@@ -1,15 +1,10 @@
-﻿using GameHub.Dto;
+﻿using GameHub.Models;
 
 namespace GameHub.CRUD.ShoppingCartsCRUD
 {
-    public interface IShoppingCartCRUD
+    public interface IShoppingCartCRUD:IRepoCRUD<ShoppingCart>
     {
-        public ShoppingCartDto Get(string userId);
-
-        public ShoppingCartDto AddProduct(int productId, string userId);
-
-        public ShoppingCartDto DeleteProduct(int productId, string userId);
-        public ShoppingCartDto IncreaseQuantity(int productId, string userId);
-        public ShoppingCartDto DecreaseQuantity(int productId, string userId);
+        void Update(ShoppingCart shoppingCart);
+        void Save();
     }
 }

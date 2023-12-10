@@ -2,8 +2,9 @@
 
 namespace GameHub.CRUD.CategoriesCRUD
 {
-    public interface ICategoryCRUD
+    public interface ICategoryCRUD :IRepoCRUD<Category>
     {
-        public List<Category> GetAll();
+        void Update(Category category);
+        void Save();
     }
 }
