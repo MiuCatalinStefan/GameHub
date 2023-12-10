@@ -1,4 +1,5 @@
 ﻿using GameHub.Data;
+using GameHub.Dto;
 using GameHub.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -22,9 +23,9 @@ namespace GameHub.Controllers
                 foreach (var item in dbItem.Products)
                 {
                     ProductDto product = new ProductDto();
-                    product.ProductId = item.Id;
-                    product.ProductName = item.Title;
-                    product.ProductPrice = item.Price;
+                    product.Id = item.Id;
+                    product.Title = item.Title;
+                    product.Price = item.Price;
 
                     totalPrice += item.Price;
                     shoppingCart.Products.Add(product);
@@ -43,10 +44,4 @@ namespace GameHub.Controllers
         public double TotalPrice { get; set; }
     }
 
-    public class ProductDto
-    {
-        public int ProductId { get; set; }
-        public string ProductName { get; set; } = "";
-        public double ProductPrice { get; set; }
-    }
 }

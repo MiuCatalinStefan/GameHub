@@ -26,5 +26,12 @@ namespace GameHub.CRUD
 
             return products;
         }
+
+        public List<Product> GetAll()
+        {
+            List<Product> products = [.. _db.Products];
+
+            return products;
+        }
     }
 }

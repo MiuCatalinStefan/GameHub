@@ -182,9 +182,8 @@ namespace GameHub.Migrations
                             Image = "https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244",
                             Platform = 1,
                             Price = 90.0,
-                            Stock = 120,
-                            Title = "GTA 6",
-                            Video = "https://youtu.be/QdBZY2fkU-0"
+                            Stock = 0,
+                            Title = "GTA 6"
                         },
                         new
                         {
