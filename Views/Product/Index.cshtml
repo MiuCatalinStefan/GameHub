@@ -12,22 +12,26 @@
 <div class="row row-cols-3 justify-content-around gap-3 mt-4">
     @foreach (var obj in Model.products)
     {
-        <div class="card shadow-lg rounded-3" style="width: 18rem;">
-            @if (obj.Image != null)
-            {
-                <img src="@obj.Image?.ToString()" style="height: 12rem" />
-            }
-            else
-            {
-                <img src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715" style="height: 12rem" />
-            }
-            <h5 class="card-title fw-bold mb-0">@obj.Title</h5>
-            <h6>@obj.Price.ToString("F2") $</h6>
-            <div class="d-flex w-100 mb-2 justify-content-between">
-                <a  asp-controller="Product" 
-                    asp-action="DetailProduct" 
-                    asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
-                <button class="btn btn-danger">Add to cart</button>
+        <div class="card shadow-lg rounded-3" style="width: 20rem;">
+            <div class="p-3">
+                @if (obj.Image != null)
+                {
+                    <img class="card-img-top mt-3" src="@obj.Image?.ToString()" style="height: 16rem" />
+                }
+                else
+                {
+                    <img class="card-img-top mt-3" src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715" style="height: 16rem" />
+                }
+                <div class="card-body">
+                    <h5 class="card-title fw-bold mb-0">@obj.Title</h5>
+                    <h6>@obj.Price.ToString("F2") $</h6>
+                    <div class="d-flex w-100 mb-2 justify-content-between">
+                        <a  asp-controller="Product" 
+                            asp-action="DetailProduct" 
+                            asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
+                        <button class="btn btn-danger">Add to cart</button>
+                    </div>
+                </div>
             </div>
         </div>
     }
