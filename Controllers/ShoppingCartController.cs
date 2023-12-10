@@ -7,7 +7,7 @@ namespace GameHub.Controllers
     public class ShoppingCartController(IShoppingCartCRUD shoppingCartCRUD) : Controller
     {
         private readonly IShoppingCartCRUD _shoppingCartCRUD = shoppingCartCRUD;
-        public IActionResult Index(int userId = 0)
+        public IActionResult Index(string userId)
         {
             ShoppingCartDto shoppingCart = _shoppingCartCRUD.Get(userId);
 
