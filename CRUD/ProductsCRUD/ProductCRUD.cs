@@ -1,14 +1,13 @@
 ﻿using GameHub.Data;
 using GameHub.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace GameHub.CRUD
+namespace GameHub.CRUD.ProductsCRUD
 {
     public enum ProductSorting : int
     {
-        None = 0, 
-        PriceAscending = 1, 
+        None = 0,
+        PriceAscending = 1,
         PriceDescending = 2
     }
 

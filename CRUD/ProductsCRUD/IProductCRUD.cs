@@ -1,6 +1,6 @@
 ﻿using GameHub.Models;
 
-namespace GameHub.CRUD
+namespace GameHub.CRUD.ProductsCRUD
 {
     public interface IProductCRUD
     {
