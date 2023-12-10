@@ -4,6 +4,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210032431_ExtendIdentityUser")]
+    partial class ExtendIdentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -470,30 +473,18 @@ namespace GameHub.Migrations
                 });
 
             modelBuilder.Entity("ProductShoppingCart", b =>
-
-            modelBuilder.Entity("GameHub.Models.ShoppingCartProduct", b =>
-
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ShoppingCartsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
+                    b.HasKey("ProductsId", "ShoppingCartsId");
 
-                    b.Property<int>("ShoppingCartId")
-                        .HasColumnType("int");
+                    b.HasIndex("ShoppingCartsId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ShoppingCartProducts");
+                    b.ToTable("ShoppingCartProductContract", (string)null);
                 });
 
             modelBuilder.Entity("GameHub.Models.ApplicationUser", b =>
@@ -590,33 +581,18 @@ namespace GameHub.Migrations
                 });
 
             modelBuilder.Entity("ProductShoppingCart", b =>
-            modelBuilder.Entity("GameHub.Models.ShoppingCartProduct", b =>
                 {
-                    b.HasOne("GameHub.Models.Product", "Product")
-                        .WithMany("ShoppingCartProducts")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("GameHub.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameHub.Models.ShoppingCart", "ShoppingCart")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("GameHub.Models.ShoppingCart", null)
+                        .WithMany()
+                        .HasForeignKey("ShoppingCartsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("ShoppingCart");
-                });
-
-            modelBuilder.Entity("GameHub.Models.Product", b =>
-                {
-                    b.Navigation("ShoppingCartProducts");
-                });
-
-            modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
