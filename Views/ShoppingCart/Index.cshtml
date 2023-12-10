@@ -1,0 +1,18 @@
+﻿@using GameHub.Controllers
+@model ShoppingCartDto
+<h1>Shopping Cart</h1>
+<form asp-controller="ShoppingCart" asp-action="Index" method="get">
+    <div class="input-group">
+       
+    </div>
+</form>
+<div>
+    @if (Model.Products.Any() == false)
+    {
+        <p>The shopping cart is empty!</p>
+    }
+    else
+    {
+        <p>The shopping cart is not empty</p>
+    }
+</div>

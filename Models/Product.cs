@@ -23,5 +23,6 @@ namespace GameHub.Models
         public required int Stock { get; set; }
         public OperatingSystem? MinOperatingSystem { get; set; }
         public OperatingSystem? RecomandedOperatingSystem { get; set; }
+        public List<ShoppingCart> ShoppingCarts { get; set; } = [];
     }
 }

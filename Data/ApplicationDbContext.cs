@@ -6,23 +6,42 @@ using OperatingSystem = GameHub.Utils.OperatingSystem;
 
 namespace GameHub.Data
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :  DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ShoppingCart>()
+               .HasMany(t => t.Products)
+               .WithMany(t => t.ShoppingCarts)
+               .UsingEntity(t => t.ToTable("ShoppingCartProductContract"));
+
+            modelBuilder.Entity<Product>()
+                .HasMany(t => t.Categories)
+                .WithMany(t => t.Products)
+                .UsingEntity(t => t.ToTable("ProductCategoryContract"));
+
             modelBuilder.Entity<Product>().HasData(
-                new { 
-                    Id = 1, 
-                    Title = "GTA 6", 
-                    Description = "Gotcha! Coming in 2025 only for Ps5", 
+                new
+                {
+                    Id = 1,
+                    Title = "GTA 6",
+                    Description = "Gotcha! Coming in 2025 only for Ps5",
                     Price = 90.0,
-                    Image = new Uri("https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244"),
-                    Video = new Uri("https://youtu.be/QdBZY2fkU-0"),
-                    Platform = Platform.PS5, 
-                    Stock = 120
+                    Image = new Uri("https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244")
+                },
+                new { Id = 2, Title = "Metro Exodus", Description = "This game is not a metro simulator", Price = 30.0 },
+                new
+                {
+                    Id = 3,
+                    Title = "Assassin's Creed Unity",
+                    Description = "The goat",
+                    Price = 20.0,
+                    Image = new Uri("https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg")
                 },
                 new { 
                     Id = 2, 
