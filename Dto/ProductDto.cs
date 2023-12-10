@@ -34,4 +34,22 @@ namespace GameHub.Dto
             };
         }
     }
+
+    public class ProductListMemberDto
+    {
+        public int Id { get; set; }
+        public required string Title { get; set; }
+        public double Price { get; set; }
+        public Uri? Image { get; set; }
+        public static ProductListMemberDto MapProductToDto(Product p)
+        {
+            return new ProductListMemberDto
+            {
+                Id = p.Id,
+                Title = p.Title,
+                Price = p.Price,
+                Image = p.Image
+            };
+        }
+    }
 }

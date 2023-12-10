@@ -21,9 +21,16 @@ namespace GameHub.Controllers
 
         public IActionResult Index(string title, string selectedCategoryName)
         {
-            Debug.Print(selectedCategoryName);
-            List<Product> products = _productCRUD.Get(title, selectedCategoryName);
-            List<Category> allCategories = _categoryCRUD.GetAll();
+            List<ProductListMemberDto> products = _productCRUD
+                .Get(title, selectedCategoryName)
+                .Select(ProductListMemberDto.MapProductToDto)
+                .ToList();
+
+            List<CategoryDto> allCategories = _categoryCRUD
+                .GetAll()
+                .Select(CategoryDto.MapCategoryToDto)
+                .ToList();
+
             return View((products, allCategories, title, selectedCategoryName, orderLabels));
         }
 
