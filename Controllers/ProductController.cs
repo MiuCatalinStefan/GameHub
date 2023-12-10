@@ -1,6 +1,8 @@
 ﻿using GameHub.CRUD;
-using GameHub.Data;
+﻿using GameHub.Data;
+using GameHub.Dto;
 using GameHub.Models;
+using GameHub.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
@@ -27,5 +29,21 @@ namespace GameHub.Controllers
             List<Category> allCategories = _categoryCRUD.GetAll();
             return View((products, allCategories, title, selectedCategoryName, orderLabels));
         }
+
+        public IActionResult DetailProduct(int id) 
+        {
+            Debug.Print(id.ToString());
+            List<Product> products = [.. _db.Products];
+            Product product = products.Where(p => p.Id == id).First();
+            if (product != null) 
+            {
+                Debug.Print("product displayed!");
+                return View((id, ProductDto.MapProductToDto(product)));
+            } else {
+                Debug.Print("exception");
+                throw new Exception("No product with this id");
+            }
+        }
     }
+
 }

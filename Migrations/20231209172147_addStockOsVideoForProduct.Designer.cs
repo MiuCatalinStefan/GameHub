@@ -3,6 +3,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231209172147_addStockOsVideoForProduct")]
+    partial class addStockOsVideoForProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,48 +37,6 @@ namespace GameHub.Migrations
                     b.HasIndex("ProductsId");
 
                     b.ToTable("ProductCategoryContract", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            CategoriesId = 1,
-                            ProductsId = 1
-                        },
-                        new
-                        {
-                            CategoriesId = 5,
-                            ProductsId = 1
-                        },
-                        new
-                        {
-                            CategoriesId = 3,
-                            ProductsId = 2
-                        },
-                        new
-                        {
-                            CategoriesId = 6,
-                            ProductsId = 2
-                        },
-                        new
-                        {
-                            CategoriesId = 3,
-                            ProductsId = 3
-                        },
-                        new
-                        {
-                            CategoriesId = 3,
-                            ProductsId = 4
-                        },
-                        new
-                        {
-                            CategoriesId = 7,
-                            ProductsId = 5
-                        },
-                        new
-                        {
-                            CategoriesId = 2,
-                            ProductsId = 6
-                        });
                 });
 
             modelBuilder.Entity("GameHub.Models.Category", b =>
@@ -92,7 +53,7 @@ namespace GameHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -124,11 +85,6 @@ namespace GameHub.Migrations
                         {
                             Id = 6,
                             Name = "First Person Shooter"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "Racing"
                         });
                 });
 
@@ -179,8 +135,10 @@ namespace GameHub.Migrations
                             Id = 1,
                             Description = "Gotcha! Coming in 2025 only for Ps5",
                             Image = "https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244",
+                            MinOperatingSystem = 1,
                             Platform = 1,
                             Price = 90.0,
+                            RecomandedOperatingSystem = 4,
                             Stock = 120,
                             Title = "GTA 6",
                             Video = "https://youtu.be/QdBZY2fkU-0"
@@ -189,8 +147,10 @@ namespace GameHub.Migrations
                         {
                             Id = 2,
                             Description = "This game is not a metro simulator",
+                            MinOperatingSystem = 2,
                             Platform = 3,
                             Price = 30.0,
+                            RecomandedOperatingSystem = 2,
                             Stock = 23,
                             Title = "Metro Exodus"
                         },
