@@ -1,4 +1,4 @@
-﻿using GameHub.CRUD;
+﻿using GameHub.CRUD.ProductsCRUD;
 using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

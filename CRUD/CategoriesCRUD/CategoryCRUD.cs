@@ -1,7 +1,7 @@
 ﻿using GameHub.Data;
 using GameHub.Models;
 
-namespace GameHub.CRUD
+namespace GameHub.CRUD.CategoriesCRUD
 {
     public class CategoryCRUD(ApplicationDbContext db) : ICategoryCRUD
     {

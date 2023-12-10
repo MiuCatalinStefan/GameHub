@@ -1,4 +1,4 @@
-﻿using GameHub.CRUD;
+﻿using GameHub.CRUD.CategoriesCRUD;
 using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

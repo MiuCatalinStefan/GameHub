@@ -1,47 +1,18 @@
-﻿using GameHub.Data;
+﻿using GameHub.CRUD.ShoppingCartsCRUD;
 using GameHub.Dto;
-using GameHub.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace GameHub.Controllers
 {
-    public class ShoppingCartController(ApplicationDbContext db) : Controller
+    public class ShoppingCartController(IShoppingCartCRUD shoppingCartCRUD) : Controller
     {
-        private readonly ApplicationDbContext _db = db;
+        private readonly IShoppingCartCRUD _shoppingCartCRUD = shoppingCartCRUD;
         public IActionResult Index(int userId = 0)
         {
-            Debug.Print(userId.ToString());
-            ShoppingCartDto shoppingCart = new ShoppingCartDto();
-
-            ShoppingCart dbItem = _db.ShoppingCarts.Where(t => t.UserId == userId).FirstOrDefault();
-
-            if (dbItem != null)
-            {
-                shoppingCart.UserId = dbItem.UserId;
-                double totalPrice = 0;
-                foreach (var item in dbItem.Products)
-                {
-                    ProductDto product = new ProductDto();
-                    product.Id = item.Id;
-                    product.Title = item.Title;
-                    product.Price = item.Price;
-
-                    totalPrice += item.Price;
-                    shoppingCart.Products.Add(product);
-                }
-                shoppingCart.TotalPrice = totalPrice;
-            }
+            ShoppingCartDto shoppingCart = _shoppingCartCRUD.Get(userId);
 
             return View(shoppingCart);
         }
-    }
-
-    public class ShoppingCartDto
-    {
-        public int UserId { get; set; }
-        public List<ProductDto> Products { get; set; } = [];
-        public double TotalPrice { get; set; }
     }
 
 }
