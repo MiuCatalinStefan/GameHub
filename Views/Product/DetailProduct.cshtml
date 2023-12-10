@@ -1,0 +1,22 @@
+﻿@model (int id, ProductDto product)
+
+<h1>Product details</h1>
+
+<ol>
+    <li>title: @Model.product.Title</li>
+    <li>price: @Model.product.Price</li>
+    @if (@Model.product.Image != null)
+    {
+    <li>img: @Model.product.Image</li>
+    }
+    <li>platform: @Model.product.Platform</li>
+    @if (@Model.product.Video != null)
+    {
+        <li>video: @Model.product.Video</li>
+    }
+    @if (@Model.product.MinOperatingSystem != null)
+    {
+        <li>os: @Model.product.MinOperatingSystem</li>
+    }
+</ol>
+

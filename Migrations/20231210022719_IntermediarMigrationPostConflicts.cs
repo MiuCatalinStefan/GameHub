@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,7 +8,7 @@
 namespace GameHub.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class IntermediarMigrationPostConflicts : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,11 +35,30 @@ namespace GameHub.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<double>(type: "float", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Video = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Platform = table.Column<int>(type: "int", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    MinOperatingSystem = table.Column<int>(type: "int", nullable: true),
+                    RecomandedOperatingSystem = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShoppingCarts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCarts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,6 +85,30 @@ namespace GameHub.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ShoppingCartProductContract",
+                columns: table => new
+                {
+                    ProductsId = table.Column<int>(type: "int", nullable: false),
+                    ShoppingCartsId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShoppingCartProductContract", x => new { x.ProductsId, x.ShoppingCartsId });
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartProductContract_Products_ProductsId",
+                        column: x => x.ProductsId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ShoppingCartProductContract_ShoppingCarts_ShoppingCartsId",
+                        column: x => x.ShoppingCartsId,
+                        principalTable: "ShoppingCarts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name" },
@@ -81,15 +125,15 @@ namespace GameHub.Migrations
 
             migrationBuilder.InsertData(
                 table: "Products",
-                columns: new[] { "Id", "Description", "Image", "Price", "Title" },
+                columns: new[] { "Id", "Description", "Image", "MinOperatingSystem", "Platform", "Price", "RecomandedOperatingSystem", "Stock", "Title", "Video" },
                 values: new object[,]
                 {
-                    { 1, "Gotcha! Coming in 2025 only for Ps5", "https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244", 90.0, "GTA 6" },
-                    { 2, "This game is not a metro simulator", null, 30.0, "Metro Exodus" },
-                    { 3, "The goat", "https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg", 20.0, "Assassin's Creed Unity" },
-                    { 4, "The second best assassin's creed game", "https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png", 40.0, "Assassin's Creed Origin" },
-                    { 5, "Racing game", "https://image.api.playstation.com/cdn/EP0001/CUSA00161_00/f0kLJbch2vDawClFcF6k9LzZ7Ohi9a7n.png", 15.0, "The Crew" },
-                    { 6, "This doesn't need a description", null, 25.0, "Minecraft" }
+                    { 1, "Gotcha! Coming in 2025 only for Ps5", "https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244", null, 1, 90.0, null, 0, "GTA 6", null },
+                    { 2, "This game is not a metro simulator", null, null, 3, 30.0, null, 23, "Metro Exodus", null },
+                    { 3, "The goat", "https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg", null, 2, 20.0, null, 13, "Assassin's Creed Unity", null },
+                    { 4, "The second best assassin's creed game", "https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png", null, 4, 40.0, null, 10, "Assassin's Creed Origin", null },
+                    { 5, "Racing game", "https://image.api.playstation.com/cdn/EP0001/CUSA00161_00/f0kLJbch2vDawClFcF6k9LzZ7Ohi9a7n.png", 1, 5, 15.0, 4, 23, "The Crew", null },
+                    { 6, "This doesn't need a description", null, 1, 5, 25.0, 4, 6, "Minecraft", null }
                 });
 
             migrationBuilder.InsertData(
@@ -111,6 +155,11 @@ namespace GameHub.Migrations
                 name: "IX_ProductCategoryContract_ProductsId",
                 table: "ProductCategoryContract",
                 column: "ProductsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShoppingCartProductContract_ShoppingCartsId",
+                table: "ShoppingCartProductContract",
+                column: "ShoppingCartsId");
         }
 
         /// <inheritdoc />
@@ -120,10 +169,16 @@ namespace GameHub.Migrations
                 name: "ProductCategoryContract");
 
             migrationBuilder.DropTable(
+                name: "ShoppingCartProductContract");
+
+            migrationBuilder.DropTable(
                 name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "ShoppingCarts");
         }
     }
 }
