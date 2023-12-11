@@ -12,11 +12,15 @@ namespace GameHub.CRUD.ProductsCRUD
         PriceDescending = 2
     }
 
-    public class ProductCRUD(ApplicationDbContext db) : IProductCRUD
+    public class ProductCRUD : RepoCRUD<Product>, IProductCRUD
     {
-        private readonly ApplicationDbContext _db = db;
+        private readonly ApplicationDbContext _db;
+        public ProductCRUD(ApplicationDbContext db):base(db)
+        {
+            _db = db;
+        }
 
-        public List<Product> Get(string title, string selectedCategory)
+        public List<Product> GetFiltered(string title, string selectedCategory)
         {
             Category? category = _db.Categories.FirstOrDefault(x => x.Name == selectedCategory);
 
@@ -26,12 +30,11 @@ namespace GameHub.CRUD.ProductsCRUD
 
             return products;
         }
-       
-        public List<Product> GetAll()
-        {
-            List<Product> products = [.. _db.Products];
 
-            return products;
+
+        public void Update(Product product)
+        {
+            _db.Products.Update(product);
         }
 
         public List<Product> GetAllProductsWithCategories()

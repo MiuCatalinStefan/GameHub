@@ -1,15 +1,20 @@
-﻿using GameHub.CRUD.ShoppingCartsCRUD;
-using GameHub.Dto;
+﻿using GameHub.Dto;
+using GameHub.Dto.DtoServices.IDtoServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameHub.Controllers
 {
-    public class ShoppingCartController(IShoppingCartCRUD shoppingCartCRUD) : Controller
+    public class ShoppingCartController : Controller
     {
-        private readonly IShoppingCartCRUD _shoppingCartCRUD = shoppingCartCRUD;
-        public IActionResult Index(int userId = 0)
+        private readonly IServiceShoppingCart _shoppingCart;
+
+        public ShoppingCartController(IServiceShoppingCart shoppingCart)
         {
-            ShoppingCartDto shoppingCart = _shoppingCartCRUD.Get(userId);
+            _shoppingCart = shoppingCart;
+        }
+        public IActionResult Index(string userId)
+        {
+            ShoppingCartDto shoppingCart = _shoppingCart.Get(userId);
 
             return View(shoppingCart);
         }

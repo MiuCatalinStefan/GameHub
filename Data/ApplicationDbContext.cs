@@ -38,7 +38,7 @@ namespace GameHub.Data
                 .WithOne(t => t.Product)
                 .HasForeignKey(t => t.ProductId)
                 .IsRequired();
-
+            
             modelBuilder.Entity<Product>().HasData(
                 new
                 {

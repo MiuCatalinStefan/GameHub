@@ -2,10 +2,9 @@
 
 namespace GameHub.CRUD.ProductsCRUD
 {
-    public interface IProductCRUD
+    public interface IProductCRUD:IRepoCRUD<Product>
     {
-        public List<Product> Get(string title, string category);
-        public List<Product> GetAll();
-        public List<Product> GetAllProductsWithCategories();
+        List<Product> GetFiltered(string title, string selectedCategory);
+        void Update(Product product);
     }
 }

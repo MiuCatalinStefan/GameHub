@@ -1,4 +1,5 @@
-﻿using GameHub.CRUD.CategoriesCRUD;
+﻿using GameHub.CRUD;
+using GameHub.CRUD.CategoriesCRUD;
 using GameHub.CRUD.ProductsCRUD;
 using GameHub.Dto;
 using GameHub.Models;
@@ -7,11 +8,14 @@ using System.Diagnostics;
 
 namespace GameHub.Controllers
 {
-    public class ProductController(IProductCRUD productCRUD, ICategoryCRUD categoryCRUD) : Controller
+    public class ProductController : Controller
     {
-        private readonly IProductCRUD _productCRUD = productCRUD;
-        private readonly ICategoryCRUD _categoryCRUD = categoryCRUD;
+        private readonly IUnitOfWork _unitOfWork;
 
+        public ProductController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         // this one should match ProductSorting enum
         private static readonly List<string> orderLabels = [
             "None",
@@ -21,13 +25,11 @@ namespace GameHub.Controllers
 
         public IActionResult Index(string title, string selectedCategoryName)
         {
-            List<ProductListMemberDto> products = _productCRUD
-                .Get(title, selectedCategoryName)
+            List<ProductListMemberDto> products = _unitOfWork.Product.GetFiltered(title, selectedCategoryName)
                 .Select(ProductListMemberDto.MapProductToDto)
                 .ToList();
 
-            List<CategoryDto> allCategories = _categoryCRUD
-                .GetAll()
+            List<CategoryDto> allCategories = _unitOfWork.Category.GetAll()
                 .Select(CategoryDto.MapCategoryToDto)
                 .ToList();
 
@@ -37,7 +39,7 @@ namespace GameHub.Controllers
         public IActionResult DetailProduct(int id)
         {
             Debug.Print(id.ToString());
-            List<Product> products = _productCRUD.GetAllProductsWithCategories();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Categories").ToList();
             if (id != 0)
             {
                 Product product = products.Where(p => p.Id == id).First();                

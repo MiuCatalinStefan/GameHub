@@ -32,7 +32,7 @@ namespace GameHub.Tests
 
             string title = "GTA";
 
-            var result = _productCRUD.Get(title, "");
+            var result = _productCRUD.GetFiltered(title, "");
             Assert.NotNull(result);
 
             foreach (var item in result)

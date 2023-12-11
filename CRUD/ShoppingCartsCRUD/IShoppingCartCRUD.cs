@@ -1,9 +1,10 @@
-﻿using GameHub.Dto;
+﻿using GameHub.Models;
 
 namespace GameHub.CRUD.ShoppingCartsCRUD
 {
-    public interface IShoppingCartCRUD
+    public interface IShoppingCartCRUD:IRepoCRUD<ShoppingCart>
     {
-        public ShoppingCartDto Get(int userId = 0);
+        void Update(ShoppingCart shoppingCart);
+
     }
 }
