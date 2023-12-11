@@ -44,81 +44,60 @@ namespace GameHub.Dto.DtoServices
 
         public ShoppingCartDto AddProduct(int productId, string userId)
         {
-            try
+            var cart = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false)
+                       ?? new ShoppingCart { ApplicationUserId = userId, IsDeleted = false };
+
+            if (cart.Id == 0)
             {
-                var cart = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false);
-                if (cart == null)
-                {
-                    cart = new ShoppingCart()
-                    {
-                        ApplicationUserId = userId,
-                        IsDeleted = false,
-                    };
-                }
-
-                cart.LastModified = DateTime.Now;
-
-                if (cart.Id == 0)
-                {
-                    _unitOfWork.ShoppingCart.Add(cart);
-                }
-                else
-                {
-                    _unitOfWork.ShoppingCart.Update(cart);
-                }
-                _unitOfWork.Save();
-
-                var cartId = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false).Id;
-
-                if (cart.Products.Where(t => t.ProductId == productId).Any())
-                {
-                    var product = cart.Products.Where(t => t.ProductId == productId).FirstOrDefault();
-                    product.Quantity += 1;
-                    _unitOfWork.ShoppingCartProduct.Update(product);
-                }
-                else
-                {
-                    var product = _unitOfWork.Product.Get(t => t.Id == productId);
-                    var cartItem = new ShoppingCartProduct()
-                    {
-                        ProductId = productId,
-                        ShoppingCartId = cartId,
-                        Quantity = 1
-                    };
-                    _unitOfWork.ShoppingCartProduct.Add(cartItem);
-                }
-                _unitOfWork.Save();
-
-                var dbItem = _unitOfWork.ShoppingCart.Get(t => t.Id == cartId);
-
-                ShoppingCartDto shoppingCart = new ShoppingCartDto();
-
-                if (dbItem != null)
-                {
-                    shoppingCart.UserId = dbItem.ApplicationUserId;
-                    double totalPrice = 0;
-                    foreach (var item in dbItem.Products)
-                    {
-                        ShoppingCartProductDto product = new ShoppingCartProductDto();
-                        product.ProductName = item.Product.Title;
-                        product.Price = item.Product.Price;
-                        product.Quantity = item.Quantity;
-
-                        totalPrice += item.Product.Price * item.Quantity;
-                        shoppingCart.Products.Add(product);
-                    }
-                    shoppingCart.TotalPrice = totalPrice;
-                }
-
-                return shoppingCart;
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
+                _unitOfWork.ShoppingCart.Add(cart);
             }
 
+            var product = _unitOfWork.Product.Get(t => t.Id == productId);
+            if (product == null)
+            {
+                throw new ArgumentException("Product not found");
+            }
+
+            if (product.Stock <= 0)
+            {
+                throw new InvalidOperationException("Product is out of stock");
+            }
+
+            var cartProduct = cart.Products.FirstOrDefault(t => t.ProductId == productId);
+            if (cartProduct != null)
+            {
+                if (cartProduct.Quantity + 1 > product.Stock)
+                {
+                    throw new InvalidOperationException("Insufficient stock for the product");
+                }
+                cartProduct.Quantity += 1;
+            }
+            else
+            {
+                cart.Products.Add(new ShoppingCartProduct
+                {
+                    ProductId = productId,
+                    Quantity = 1,
+                    Product = product
+                });
+            }
+
+            _unitOfWork.Save();
+
+            double totalPrice = cart.Products.Sum(p => p.Product.Price * p.Quantity);
+
+            return new ShoppingCartDto
+            {
+                UserId = cart.ApplicationUserId,
+                TotalPrice = totalPrice,
+                Products = cart.Products.Select(p => new ShoppingCartProductDto
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.Product.Title,
+                    Price = p.Product.Price,
+                    Quantity = p.Quantity
+                }).ToList()
+            };
         }
 
         public ShoppingCartDto DeleteProduct(int productId, string userId)
@@ -126,86 +105,84 @@ namespace GameHub.Dto.DtoServices
             try
             {
                 var cart = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false);
-                var obj = cart.Products.Where(t => t.ProductId == productId).FirstOrDefault();
-                _unitOfWork.ShoppingCartProduct.Remove(obj);
+                if (cart == null)
+                {
+                    throw new InvalidOperationException("Shopping cart not found");
+                }
+
+                var productToRemove = cart.Products.FirstOrDefault(p => p.ProductId == productId);
+                if (productToRemove != null)
+                {
+                    cart.Products.Remove(productToRemove);
+                    _unitOfWork.ShoppingCartProduct.Remove(productToRemove);
+                }
+
                 _unitOfWork.Save();
 
-                cart.Products.Remove(cart.Products.Where(note => note.Id == productId).First());
-                if (cart.Products.Count == 0)
+                return new ShoppingCartDto
                 {
-                    _unitOfWork.ShoppingCart.Remove(cart);
-                    _unitOfWork.Save();
-                }
-
-                var dbItem = _unitOfWork.ShoppingCart.Get(t => t.Id == cart.Id);
-
-                ShoppingCartDto shoppingCart = new ShoppingCartDto();
-
-                if (dbItem != null)
-                {
-                    shoppingCart.UserId = dbItem.ApplicationUserId;
-                    double totalPrice = 0;
-                    foreach (var item in dbItem.Products)
+                    UserId = cart.ApplicationUserId,
+                    TotalPrice = cart.Products.Sum(p => p.Product.Price * p.Quantity),
+                    Products = cart.Products.Select(p => new ShoppingCartProductDto
                     {
-                        ShoppingCartProductDto product = new ShoppingCartProductDto();
-                        product.ProductName = item.Product.Title;
-                        product.Price = item.Product.Price;
-                        product.Quantity = item.Quantity;
-
-                        totalPrice += item.Product.Price * item.Quantity;
-                        shoppingCart.Products.Add(product);
-                    }
-                    shoppingCart.TotalPrice = totalPrice;
-                }
-
-                return shoppingCart;
-
+                        ProductId = p.ProductId,
+                        ProductName = p.Product.Title,
+                        Price = p.Product.Price,
+                        Quantity = p.Quantity
+                    }).ToList()
+                };
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return null; 
             }
         }
 
         public ShoppingCartDto IncreaseQuantity(int productId, string userId)
         {
-            try
+            var cart = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false);
+            if (cart == null)
             {
-                var cart = _unitOfWork.ShoppingCart.Get(t => t.ApplicationUserId == userId && t.IsDeleted == false);
-                var obj = cart.Products.Where(t => t.ProductId == productId).FirstOrDefault();
-                obj.Quantity += 1;
-                _unitOfWork.ShoppingCartProduct.Update(obj);
-                _unitOfWork.Save();
+                throw new InvalidOperationException("Shopping cart not found");
+            }
 
-                var dbItem = _unitOfWork.ShoppingCart.Get(t => t.Id == cart.Id);
+            var cartProduct = cart.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (cartProduct == null)
+            {
+                throw new InvalidOperationException("Product not found in cart");
+            }
 
-                ShoppingCartDto shoppingCart = new ShoppingCartDto();
+            var product = _unitOfWork.Product.Get(t => t.Id == productId);
+            if (product == null)
+            {
+                throw new InvalidOperationException("Product details not found");
+            }
 
-                if (dbItem != null)
+            if (cartProduct.Quantity + 1 > product.Stock)
+            {
+                throw new InvalidOperationException("Insufficient stock to increase quantity");
+            }
+
+            cartProduct.Quantity += 1;
+
+            _unitOfWork.ShoppingCartProduct.Update(cartProduct);
+            _unitOfWork.Save();
+
+            double totalPrice = cart.Products.Sum(p => p.Product.Price * p.Quantity);
+
+            return new ShoppingCartDto
+            {
+                UserId = cart.ApplicationUserId,
+                TotalPrice = totalPrice,
+                Products = cart.Products.Select(p => new ShoppingCartProductDto
                 {
-                    shoppingCart.UserId = dbItem.ApplicationUserId;
-                    double totalPrice = 0;
-                    foreach (var item in dbItem.Products)
-                    {
-                        ShoppingCartProductDto product = new ShoppingCartProductDto();
-                        product.ProductName = item.Product.Title;
-                        product.Price = item.Product.Price;
-                        product.Quantity = item.Quantity;
-
-                        totalPrice += item.Product.Price * item.Quantity;
-                        shoppingCart.Products.Add(product);
-                    }
-                    shoppingCart.TotalPrice = totalPrice;
-                }
-
-                return shoppingCart;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return null;
-            }
+                    ProductId = p.ProductId,
+                    ProductName = p.Product.Title,
+                    Price = p.Product.Price,
+                    Quantity = p.Quantity
+                }).ToList()
+            };
         }
 
         public ShoppingCartDto DecreaseQuantity(int productId, string userId)

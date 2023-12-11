@@ -6,6 +6,5 @@ namespace GameHub.CRUD.ProductsCRUD
     {
         List<Product> GetFiltered(string title, string selectedCategory);
         void Update(Product product);
-        void Save();
     }
 }

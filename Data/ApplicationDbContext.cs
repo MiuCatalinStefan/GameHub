@@ -22,12 +22,6 @@ namespace GameHub.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ApplicationUser>()
-                .HasMany(t => t.ShoppingCarts)
-                .WithOne(t => t.ApplicationUser)
-                .HasForeignKey(t => t.ApplicationUserId)
-                .IsRequired();
-
             modelBuilder.Entity<ShoppingCart>()
                .HasMany(t => t.Products)
                .WithOne(t => t.ShoppingCart)
@@ -44,7 +38,7 @@ namespace GameHub.Data
                 .WithOne(t => t.Product)
                 .HasForeignKey(t => t.ProductId)
                 .IsRequired();
-
+            
             modelBuilder.Entity<Product>().HasData(
                 new
                 {

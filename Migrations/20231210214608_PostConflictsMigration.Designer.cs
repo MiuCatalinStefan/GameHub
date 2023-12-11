@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231210110458_Add_ConnectionToUser")]
-    partial class Add_ConnectionToUser
+    [Migration("20231210214608_PostConflictsMigration")]
+    partial class PostConflictsMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -144,6 +144,10 @@ namespace GameHub.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AvailableLanguages")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -151,8 +155,21 @@ namespace GameHub.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MinGraphic")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MinOperatingSystem")
                         .HasColumnType("int");
+
+                    b.Property<int?>("MinProcessor")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MinRam")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MultiplayerInfo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Platform")
                         .HasColumnType("int");
@@ -160,10 +177,33 @@ namespace GameHub.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<string>("Producer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RecomandedAge")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RecomandedGraphic")
+                        .HasColumnType("int");
+
                     b.Property<int?>("RecomandedOperatingSystem")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RecomandedProcessor")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("RecomandedRam")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReleaseDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Stock")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StorageMemory")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -181,63 +221,110 @@ namespace GameHub.Migrations
                         new
                         {
                             Id = 1,
+                            AvailableLanguages = "[\"English\",\"French\",\"German\",\"Japanese\"]",
                             Description = "Gotcha! Coming in 2025 only for Ps5",
                             Image = "https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244",
+                            MultiplayerInfo = "Co-op: 1-30 players",
                             Platform = 1,
                             Price = 90.0,
+                            Producer = "Rockstar",
+                            RecomandedAge = 17,
+                            ReleaseDate = "12 october 2025",
                             Stock = 0,
+                            StorageMemory = 100,
                             Title = "GTA 6"
                         },
                         new
                         {
                             Id = 2,
+                            AvailableLanguages = "[\"English\",\"French\",\"German\"]",
                             Description = "This game is not a metro simulator",
+                            MultiplayerInfo = "only single player",
                             Platform = 3,
                             Price = 30.0,
+                            Producer = "Deep Silver",
+                            RecomandedAge = 15,
+                            ReleaseDate = "30 june 2019",
                             Stock = 23,
+                            StorageMemory = 60,
                             Title = "Metro Exodus"
                         },
                         new
                         {
                             Id = 3,
+                            AvailableLanguages = "[\"English\",\"French\",\"German\"]",
                             Description = "The goat",
                             Image = "https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg",
+                            MultiplayerInfo = "Co-op: 2-4 players",
                             Platform = 2,
                             Price = 20.0,
+                            Producer = "Ubisoft Connect",
+                            RecomandedAge = 12,
+                            ReleaseDate = "2 may 2014",
                             Stock = 13,
+                            StorageMemory = 50,
                             Title = "Assassin's Creed Unity"
                         },
                         new
                         {
                             Id = 4,
+                            AvailableLanguages = "[\"English\",\"French\",\"German\",\"Japanese\",\"Turkish\"]",
                             Description = "The second best assassin's creed game",
                             Image = "https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png",
+                            MultiplayerInfo = "only single player",
                             Platform = 4,
                             Price = 40.0,
+                            Producer = "Ubisoft Connect",
+                            RecomandedAge = 12,
+                            ReleaseDate = "18 december 2017",
                             Stock = 10,
+                            StorageMemory = 89,
                             Title = "Assassin's Creed Origin"
                         },
                         new
                         {
                             Id = 5,
+                            AvailableLanguages = "[\"English\",\"French\",\"German\",\"Japanese\",\"Turkish\"]",
                             Description = "Racing game",
                             Image = "https://image.api.playstation.com/cdn/EP0001/CUSA00161_00/f0kLJbch2vDawClFcF6k9LzZ7Ohi9a7n.png",
+                            MinGraphic = 2,
                             MinOperatingSystem = 1,
+                            MinProcessor = 2,
+                            MinRam = 16,
+                            MultiplayerInfo = "Co-op: up to 32 players",
                             Platform = 5,
                             Price = 15.0,
+                            Producer = "Ubisoft",
+                            RecomandedGraphic = 4,
                             RecomandedOperatingSystem = 4,
+                            RecomandedProcessor = 1,
+                            RecomandedRam = 32,
+                            ReleaseDate = "22 july 2020",
                             Stock = 23,
+                            StorageMemory = 88,
                             Title = "The Crew"
                         },
                         new
                         {
                             Id = 6,
+                            AvailableLanguages = "[\"English\"]",
                             Description = "This doesn't need a description",
+                            MinGraphic = 1,
                             MinOperatingSystem = 1,
+                            MinProcessor = 4,
+                            MinRam = 8,
+                            MultiplayerInfo = "Public server",
                             Platform = 5,
                             Price = 25.0,
+                            Producer = "Sandbox",
+                            RecomandedAge = 4,
+                            RecomandedGraphic = 3,
                             RecomandedOperatingSystem = 4,
+                            RecomandedProcessor = 5,
+                            RecomandedRam = 16,
+                            ReleaseDate = "8 january 2010",
                             Stock = 6,
+                            StorageMemory = 7,
                             Title = "Minecraft"
                         });
                 });
@@ -547,7 +634,7 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.HasOne("GameHub.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ShoppingCarts")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -633,11 +720,6 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("GameHub.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

@@ -631,7 +631,7 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.HasOne("GameHub.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("ShoppingCarts")
+                        .WithMany()
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -717,11 +717,6 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("GameHub.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("ShoppingCarts");
                 });
 #pragma warning restore 612, 618
         }

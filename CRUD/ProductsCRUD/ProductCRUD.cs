@@ -31,11 +31,6 @@ namespace GameHub.CRUD.ProductsCRUD
             return products;
         }
 
-        public void Save()
-        {
-            _db.SaveChanges();
-
-        }
 
         public void Update(Product product)
         {
