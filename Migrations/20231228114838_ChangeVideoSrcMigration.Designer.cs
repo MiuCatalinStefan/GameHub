@@ -4,6 +4,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231228114838_ChangeVideoSrcMigration")]
+    partial class ChangeVideoSrcMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,7 +233,7 @@ namespace GameHub.Migrations
                             Stock = 0,
                             StorageMemory = 100,
                             Title = "GTA 6",
-                            Video = "https://www.youtube.com/embed/QdBZY2fkU-0?si=xAkI1IZSKdli1kjn"
+                            Video = "https://www.youtube.com/watch?v=QdBZY2fkU-0&t=5s"
                         },
                         new
                         {
@@ -246,7 +249,7 @@ namespace GameHub.Migrations
                             Stock = 23,
                             StorageMemory = 60,
                             Title = "Metro Exodus",
-                            Video = "https://www.youtube.com/embed/fbbqlvuovQ0?si=5D3_u86XU3mCToDA"
+                            Video = "https://www.youtube.com/watch?v=fbbqlvuovQ0"
                         },
                         new
                         {
@@ -263,7 +266,7 @@ namespace GameHub.Migrations
                             Stock = 13,
                             StorageMemory = 50,
                             Title = "Assassin's Creed Unity",
-                            Video = "https://www.youtube.com/embed/xzCEdSKMkdU?si=5CNvTX67tXPcOD00"
+                            Video = "https://www.youtube.com/watch?v=fbbqlvuovQ0"
                         },
                         new
                         {
@@ -280,7 +283,7 @@ namespace GameHub.Migrations
                             Stock = 10,
                             StorageMemory = 89,
                             Title = "Assassin's Creed Origin",
-                            Video = "https://www.youtube.com/embed/cK4iAjzAoas?si=7QKTeylLWgXXMRQT"
+                            Video = "https://www.youtube.com/watch?v=cK4iAjzAoas"
                         },
                         new
                         {
