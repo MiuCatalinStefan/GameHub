@@ -48,6 +48,7 @@ namespace GameHub.Controllers
                     Debug.Print("product displayed!");
                     ProductDto productDto = ProductDto.MapProductToDto(product);
                     List<ProductDto> relatedProducts = RelatedProductsBasedOnCategory(product.Categories, products);
+                    relatedProducts = relatedProducts.Where(prod => prod.Id != id).ToList();
                     return View((id, productDto, relatedProducts));
                 }
                 else
