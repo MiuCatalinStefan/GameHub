@@ -39,7 +39,7 @@ namespace GameHub.Controllers
         public IActionResult DetailProduct(int id)
         {
             Debug.Print(id.ToString());
-            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Categories").ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Categories,Platform").ToList();
             if (id != 0)
             {
                 Product product = products.Where(p => p.Id == id).First();                

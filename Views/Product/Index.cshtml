@@ -4,8 +4,18 @@
 
 <form asp-controller="Product" asp-action="Index" method="get">
     <div class="input-group">
+        <input type="number" name="minPrice" class="form-control form-icon-trailing" style="width: 6rem;" placeholder="0" min="0" max="999" />
+        <input type="number" name="maxPrice" class="form-control form-icon-trailing" style="width: 6rem;" placeholder="999" min="0" max="999" />
+        <select name="selectedRegion" class="form-select" aria-label="Select category" style="width: 10rem;">
+            <option selected>All Regions</option>
+        </select>
+        <select name="selectedPlatform" class="form-select" aria-label="Select category" style="width: 10rem;">
+            <option selected>All Platforms</option>
+        </select>
+    </div>
+    <div class="input-group">
         <input type="text" class="form-control w-50" placeholder="Title name" name="title" value="@Model.title" />
-        <select name="selectedCategoryName" class="form-select" aria-label="Select category" style="width:10rem;">
+        <select name="selectedCategoryName" class="form-select" aria-label="Select category" style="width: 10rem;">
             @if (Model.selectedCategoryName == "All Categories" || Model.selectedCategoryName == "")
             {
                 <option selected>All Categories</option>

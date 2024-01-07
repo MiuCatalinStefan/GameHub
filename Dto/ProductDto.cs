@@ -1,6 +1,5 @@
 ﻿using GameHub.Models;
 using GameHub.Utils;
-using PlatformEnum = GameHub.Utils.Platform;
 
 namespace GameHub.Dto
 {
@@ -41,21 +40,22 @@ namespace GameHub.Dto
                 Image = p.Image ?? new Uri("https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715"),
                 Video = p.Video,
                 Categories = GetCategoriesNames(p.Categories),
-                Platform = PlatformValue.getPlatformName(p.Platform),
+                Platform = p.Platform.Name,
                 Stock = p.Stock,
-                MinOperatingSystem = (p.Platform == PlatformEnum.PC && p.MinOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.MinOperatingSystem) : null,
-                RecomandedOperatingSystem = (p.Platform == PlatformEnum.PC && p.RecomandedOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.RecomandedOperatingSystem) : null,
+                // TODO remove enums and refactor below
+                MinOperatingSystem = (p.PlatformId == 5 && p.MinOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.MinOperatingSystem) : null,
+                RecomandedOperatingSystem = (p.PlatformId == 5 && p.RecommendedOperatingSystem != null) ? OperatingSystemsValue.getOsValue((Utils.OperatingSystem)p.RecommendedOperatingSystem) : null,
                 ReleaseDate = p.ReleaseDate,
                 Producer = p.Producer,
                 AvailableLanguages = p.AvailableLanguages.Count > 0 ? p.AvailableLanguages : ["english"],
-                RecomandedAge = p.RecomandedAge != null ? p.RecomandedAge : 0,
+                RecomandedAge = p.RecommendedAge != null ? p.RecommendedAge : 0,
                 MultiplayerInfo = p.MultiplayerInfo,
-                MinProcessor = (p.Platform == PlatformEnum.PC && p.MinProcessor != null) ? ProcessorValue.GetProcessorValue((Processor)p.MinProcessor) : null,
-                RecomandedProcessor = (p.Platform == PlatformEnum.PC && p.RecomandedProcessor != null) ? ProcessorValue.GetProcessorValue((Processor)p.RecomandedProcessor) : null,
-                MinGraphic = (p.Platform == PlatformEnum.PC && p.MinGraphic != null) ? GraphicValue.GetGraphicValue((Graphic)p.MinGraphic) : null,
-                RecomandedGraphic = (p.Platform == PlatformEnum.PC && p.RecomandedGraphic != null) ? GraphicValue.GetGraphicValue((Graphic)p.RecomandedGraphic) : null,
-                MinRam = (p.Platform == PlatformEnum.PC && p.MinRam != null) ? RamMemoryValue.GetRamemoryValue((RamMemory)p.MinRam) : null,
-                RecomandedRam = (p.Platform == PlatformEnum.PC && p.RecomandedRam != null) ? RamMemoryValue.GetRamemoryValue((RamMemory)p.RecomandedRam) : null,
+                MinProcessor = (p.PlatformId == 5 && p.MinProcessor != null) ? ProcessorValue.GetProcessorValue((Processor)p.MinProcessor) : null,
+                RecomandedProcessor = (p.PlatformId == 5 && p.RecommendedProcessor != null) ? ProcessorValue.GetProcessorValue((Processor)p.RecommendedProcessor) : null,
+                MinGraphic = (p.PlatformId == 5 && p.MinGraphic != null) ? GraphicValue.GetGraphicValue((Graphic)p.MinGraphic) : null,
+                RecomandedGraphic = (p.PlatformId == 5 && p.RecommendedGraphic != null) ? GraphicValue.GetGraphicValue((Graphic)p.RecommendedGraphic) : null,
+                MinRam = (p.PlatformId == 5 && p.MinRam != null) ? RamMemoryValue.GetRamemoryValue((RamMemory)p.MinRam) : null,
+                RecomandedRam = (p.PlatformId == 5 && p.RecommendedRam != null) ? RamMemoryValue.GetRamemoryValue((RamMemory)p.RecommendedRam) : null,
                 StorageMemory = p.StorageMemory ?? null
             };
         }
@@ -68,13 +68,13 @@ namespace GameHub.Dto
                 Title = p.Title,
                 Price = p.Price,
                 Image = p.Image ?? new Uri("https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715"),
-                Platform = PlatformValue.getPlatformName(p.Platform),
+                Platform = p.Platform.Name,
             };
         }
 
         public static List<string> GetCategoriesNames(List<Category> categories)
         {
-            List<string> categoriesNames = new List<string>();
+            List<string> categoriesNames = [];
             if (categories.Count > 0)
             {
                 foreach (Category category in categories)

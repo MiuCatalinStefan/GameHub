@@ -4,6 +4,7 @@ using GameHub.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GameHub.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240106235715_PlatformsSeed")]
+    partial class PlatformsSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -222,22 +225,19 @@ namespace GameHub.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecommendedAge")
+                    b.Property<int?>("RecomandedAge")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecommendedGraphic")
+                    b.Property<int?>("RecomandedGraphic")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecommendedOperatingSystem")
+                    b.Property<int?>("RecomandedOperatingSystem")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecommendedProcessor")
+                    b.Property<int?>("RecomandedProcessor")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RecommendedRam")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RegionId")
+                    b.Property<int?>("RecomandedRam")
                         .HasColumnType("int");
 
                     b.Property<string>("ReleaseDate")
@@ -261,8 +261,6 @@ namespace GameHub.Migrations
 
                     b.HasIndex("PlatformId");
 
-                    b.HasIndex("RegionId");
-
                     b.ToTable("Products");
 
                     b.HasData(
@@ -276,7 +274,7 @@ namespace GameHub.Migrations
                             PlatformId = 1,
                             Price = 90.0,
                             Producer = "Rockstar",
-                            RegionId = 2,
+                            RecomandedAge = 17,
                             ReleaseDate = "12 october 2025",
                             Stock = 0,
                             StorageMemory = 100,
@@ -292,7 +290,7 @@ namespace GameHub.Migrations
                             PlatformId = 3,
                             Price = 30.0,
                             Producer = "Deep Silver",
-                            RegionId = 1,
+                            RecomandedAge = 15,
                             ReleaseDate = "30 june 2019",
                             Stock = 23,
                             StorageMemory = 60,
@@ -309,7 +307,7 @@ namespace GameHub.Migrations
                             PlatformId = 2,
                             Price = 20.0,
                             Producer = "Ubisoft Connect",
-                            RegionId = 1,
+                            RecomandedAge = 12,
                             ReleaseDate = "2 may 2014",
                             Stock = 13,
                             StorageMemory = 50,
@@ -326,7 +324,7 @@ namespace GameHub.Migrations
                             PlatformId = 4,
                             Price = 40.0,
                             Producer = "Ubisoft Connect",
-                            RegionId = 1,
+                            RecomandedAge = 12,
                             ReleaseDate = "18 december 2017",
                             Stock = 10,
                             StorageMemory = 89,
@@ -347,7 +345,10 @@ namespace GameHub.Migrations
                             PlatformId = 5,
                             Price = 15.0,
                             Producer = "Ubisoft",
-                            RegionId = 1,
+                            RecomandedGraphic = 4,
+                            RecomandedOperatingSystem = 4,
+                            RecomandedProcessor = 1,
+                            RecomandedRam = 32,
                             ReleaseDate = "22 july 2020",
                             Stock = 23,
                             StorageMemory = 88,
@@ -367,40 +368,15 @@ namespace GameHub.Migrations
                             PlatformId = 5,
                             Price = 25.0,
                             Producer = "Sandbox",
-                            RegionId = 1,
+                            RecomandedAge = 4,
+                            RecomandedGraphic = 3,
+                            RecomandedOperatingSystem = 4,
+                            RecomandedProcessor = 5,
+                            RecomandedRam = 16,
                             ReleaseDate = "8 january 2010",
                             Stock = 6,
                             StorageMemory = 7,
                             Title = "Minecraft"
-                        });
-                });
-
-            modelBuilder.Entity("GameHub.Models.Region", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Regions");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Europe"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "USA"
                         });
                 });
 
@@ -710,15 +686,7 @@ namespace GameHub.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameHub.Models.Region", "Region")
-                        .WithMany("Products")
-                        .HasForeignKey("RegionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Platform");
-
-                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
@@ -810,11 +778,6 @@ namespace GameHub.Migrations
             modelBuilder.Entity("GameHub.Models.Product", b =>
                 {
                     b.Navigation("ShoppingCartProducts");
-                });
-
-            modelBuilder.Entity("GameHub.Models.Region", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("GameHub.Models.ShoppingCart", b =>
