@@ -3,6 +3,7 @@ using GameHub.Utils;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OperatingSystem = GameHub.Utils.OperatingSystem;
+using Platform = GameHub.Models.Platform;
 
 namespace GameHub.Data
 {
@@ -10,13 +11,13 @@ namespace GameHub.Data
     {
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Platform> Platforms { get; set; }
+        public DbSet<Region> Regions { get; set; }
       
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartProduct> ShoppingCartProducts { get; set; }
 
-      
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -36,9 +37,35 @@ namespace GameHub.Data
             modelBuilder.Entity<Product>()
                 .HasMany(t => t.ShoppingCartProducts)
                 .WithOne(t => t.Product)
-                .HasForeignKey(t => t.ProductId)
+                .HasForeignKey(t => 
+            t.ProductId)
                 .IsRequired();
-            
+
+            modelBuilder.Entity<Platform>()
+                .HasMany(t => t.Products)
+                .WithOne(t => t.Platform)
+                .HasForeignKey(t => t.PlatformId)
+                .IsRequired();
+
+            modelBuilder.Entity<Region>()
+                .HasMany(t => t.Products)
+                .WithOne(t => t.Region)
+                .HasForeignKey(t => t.RegionId)
+                .IsRequired();
+
+            modelBuilder.Entity<Platform>().HasData(
+                new { Id = 1, Name = "PlayStation 5" },
+                new { Id = 2, Name = "PlayStation 4" },
+                new { Id = 3, Name = "Xbox Series X/S" },
+                new { Id = 4, Name = "Nintendo Switch" },
+                new { Id = 5, Name = "PC" }
+                );
+
+            modelBuilder.Entity<Region>().HasData(
+                new { Id = 1, Name = "Europe" },
+                new { Id = 2, Name = "USA" }
+                );
+
             modelBuilder.Entity<Product>().HasData(
                 new
                 {
@@ -48,7 +75,8 @@ namespace GameHub.Data
                     Price = 90.0,
                     Image = new Uri("https://cdn.images.express.co.uk/img/dynamic/143/590x/secondary/GTA-6-trailer-Grand-Theft-Auto-6-gameplay-reveal-5098949.jpg?r=1701793274244"),
                     Video = new Uri("https://www.youtube.com/embed/QdBZY2fkU-0?si=xAkI1IZSKdli1kjn"),
-                    Platform = Platform.PS5,
+                    PlatformId = 1,
+                    RegionId = 2,
                     Stock = 0,
                     ReleaseDate = "12 october 2025",
                     Producer = "Rockstar",
@@ -64,7 +92,8 @@ namespace GameHub.Data
                     Description = "This game is not a metro simulator",
                     Price = 30.0,
                     Video = new Uri("https://www.youtube.com/embed/fbbqlvuovQ0?si=5D3_u86XU3mCToDA"),
-                    Platform = Platform.XBOX,
+                    PlatformId = 3,
+                    RegionId = 1,
                     Stock = 23,
                     ReleaseDate = "30 june 2019",
                     Producer = "Deep Silver",
@@ -81,7 +110,8 @@ namespace GameHub.Data
                     Price = 20.0,
                     Image = new Uri("https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Assassin%27s_Creed_Unity_cover.jpg/220px-Assassin%27s_Creed_Unity_cover.jpg"),
                     Video = new Uri("https://www.youtube.com/embed/xzCEdSKMkdU?si=5CNvTX67tXPcOD00"),
-                    Platform = Platform.PS4,
+                    PlatformId = 2,
+                    RegionId = 1,
                     Stock = 13,
                     ReleaseDate = "2 may 2014",
                     Producer = "Ubisoft Connect",
@@ -99,7 +129,8 @@ namespace GameHub.Data
                     Price = 40.0,
                     Image = new Uri("https://upload.wikimedia.org/wikipedia/en/4/4a/Assassin%27s_Creed_Origins_Cover_Art.png"),
                     Video = new Uri("https://www.youtube.com/embed/cK4iAjzAoas?si=7QKTeylLWgXXMRQT"),
-                    Platform = Platform.NINTENDO,
+                    PlatformId = 4,
+                    RegionId = 1,
                     Stock = 10,
                     ReleaseDate = "18 december 2017",
                     Producer = "Ubisoft Connect",
@@ -116,7 +147,8 @@ namespace GameHub.Data
                     Price = 15.0,
                     Image = new Uri("https://image.api.playstation.com/cdn/EP0001/CUSA00161_00/f0kLJbch2vDawClFcF6k9LzZ7Ohi9a7n.png"),
                     Video = new Uri("https://www.youtube.com/embed/LVDUbfdfBPk?si=sI9E-UYEqfx1FSmG"),
-                    Platform = Platform.PC,
+                    PlatformId = 5,
+                    RegionId = 1,
                     Stock = 23,
                     MinOperatingSystem = OperatingSystem.Windows10_64Bit,
                     RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit,
@@ -138,7 +170,8 @@ namespace GameHub.Data
                     Title = "Minecraft",
                     Description = "This doesn't need a description",
                     Price = 25.0,
-                    Platform = Platform.PC,
+                    PlatformId = 5,
+                    RegionId = 1,
                     Stock = 6,
                     MinOperatingSystem = OperatingSystem.Windows10_64Bit,
                     RecomandedOperatingSystem = OperatingSystem.Windows11_32Bit,

@@ -1,11 +1,19 @@
-﻿@model (List<ProductListMemberDto> products, List<CategoryDto> allCategories, string title, string selectedCategoryName, List<string> orderLabels)
+﻿@model (List<ProductListMemberDto> products, List<CategoryDto> allCategories, List<RegionDto> allRegions, List<PlatformDto> allPlatforms, List<string> orderLabels, string title, string selectedCategoryName, string selectedRegionName, string selectedPlatformName, string selectedOrdering, double minPrice, double maxPrice)
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="your-script.js"></script>
 
 <h2>Search for products</h2>
 
 <form asp-controller="Product" asp-action="Index" method="get">
     <div class="input-group">
-        <input type="text" class="form-control w-50" placeholder="Title name" name="title" value="@Model.title" />
-        <select name="selectedCategoryName" class="form-select" aria-label="Select category" style="width:10rem;">
+        <input id="titleInput" type="text" class="form-control w-50" placeholder="Title name" name="title" value="@Model.title" />
+        <input id="minPriceInput" type="text" name="minPrice" class="form-control form-icon-trailing" style="width: 4rem;" value="@Model.minPrice" placeholder="0" min="0" max="999" />
+        <input id="maxPriceInput" type="text" name="maxPrice" class="form-control form-icon-trailing" style="width: 4rem;" value="@Model.maxPrice" placeholder="999" min="0" max="999" />
+        <input id="submitBtn" class="btn btn-primary" type="submit" value="Filter" />
+    </div>
+    <div class="input-group mt-2">
+        <select id="categorySelect" name="selectedCategoryName" class="form-select" aria-label="Select category" style="width: 10rem;">
             @if (Model.selectedCategoryName == "All Categories" || Model.selectedCategoryName == "")
             {
                 <option selected>All Categories</option>
@@ -26,8 +34,134 @@
                 }
             }
         </select>
-        <input class="btn btn-primary" type="submit" value="Filter"/>
+        <select id="regionSelect" name="selectedRegionName" class="form-select" aria-label="Select region" style="width: 10rem;">
+            @if (Model.selectedRegionName == "All Regions" || Model.selectedRegionName == "")
+            {
+                <option selected>All Regions</option>
+            }
+            else
+            {
+                <option>All Regions</option>
+            }
+            @foreach (var region in Model.allRegions)
+            {
+                if (region.Name == Model.selectedRegionName)
+                {
+                    <option value="@region.Name" selected>@region.Name</option>
+                }
+                else
+                {
+                    <option value="@region.Name">@region.Name</option>
+                }
+            }
+        </select>
+        <select id="platformSelect" name="selectedPlatformName" class="form-select" aria-label="Select platform" style="width: 10rem;">
+            @if (Model.selectedPlatformName == "All Platforms" || Model.selectedPlatformName == "")
+            {
+                <option selected>All Platforms</option>
+            }
+            else
+            {
+                <option>All Platforms</option>
+            }
+            @foreach (var platform in Model.allPlatforms)
+            {
+                if (platform.Name == Model.selectedPlatformName)
+                {
+                    <option value="@platform.Name" selected>@platform.Name</option>
+                }
+                else
+                {
+                    <option value="@platform.Name">@platform.Name</option>
+                }
+            }
+        </select>
+        <select id="orderSelect" name="selectedOrdering" class="form-select" aria-label="Select order" style="width: 10rem;">
+            @foreach (var order in Model.orderLabels)
+            {
+                if (order == Model.selectedOrdering)
+                {
+                    <option value="@order" selected>@order</option>
+                }
+                else
+                {
+                    <option value="@order">@order</option>
+                }
+            }
+        </select>
     </div>
+    <script>
+        $(document).ready(function () {
+            if ($("#minPriceInput").val() == '') {
+                $("#minPriceInput").val(0);
+            }
+
+            if ($("#maxPriceInput").val() == '') {
+                $("#maxPriceInput").val(999);
+            }
+
+            $("#minPriceInput").on('input', function (e) {
+                var val = $(this).val();
+                // Remove non-digits
+                val = val.replace(/[^0-9]/g, '');
+                // Remove leading zeros
+                val = val.replace(/^0+/, '');
+                $(this).val(val);
+            });
+
+            $("#maxPriceInput").on('input', function (e) {
+                var val = $(this).val();
+                // Remove non-digits
+                val = val.replace(/[^0-9]/g, '');
+                // Remove leading zeros
+                val = val.replace(/^0+/, '');
+                $(this).val(val);
+            });
+
+            $("#minPriceInput").on('blur', function () {
+                if ($(this).val() == '') {
+                    $(this).val(0);
+                }
+
+                $(this).val(
+                    Math.min($(this).val(), 999)
+                );
+
+                $('#maxPriceInput').val(
+                    Math.max($(this).val(), $("#maxPriceInput").val())
+                );
+            });
+
+            $("#maxPriceInput").on('blur', function () {
+                if ($(this).val() == '') {
+                    $(this).val(999);
+                } else {
+                    $(this).val(
+                        Math.min(
+                            Math.max($(this).val(), $("#minPriceInput").val()),
+                            999
+                        )
+                    );
+                }
+            });
+
+            $("#categorySelect").change(function () {
+                $("#submitBtn").click();
+            });
+
+            $("#regionSelect").change(function () {
+                $("#submitBtn").click();
+            });
+
+            $("#platformSelect").change(function () {
+                $("#submitBtn").click();
+            });
+
+            $("#orderSelect").change(function () {
+                $("#submitBtn").click();
+            });
+        });
+    </script>
 </form>
 
 <div class="row row-cols-3 justify-content-around gap-3 mt-4">

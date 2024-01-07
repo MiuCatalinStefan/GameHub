@@ -3,6 +3,7 @@ using GameHub.CRUD.CategoriesCRUD;
 using GameHub.CRUD.ProductsCRUD;
 using GameHub.Dto;
 using GameHub.Models;
+using GameHub.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,14 +19,16 @@ namespace GameHub.Controllers
         }
         // this one should match ProductSorting enum
         private static readonly List<string> orderLabels = [
-            "None",
+            "No Order",
+            "Title A-Z",
+            "Title Z-A",
             "Price Ascending",
             "Price Descending"
         ];
 
-        public IActionResult Index(string title, string selectedCategoryName)
+        public IActionResult Index(string title, string selectedCategoryName, string selectedRegionName, string selectedPlatformName, string selectedOrdering = "No Order", double minPrice = 0, double maxPrice = 999)
         {
-            List<ProductListMemberDto> products = _unitOfWork.Product.GetFiltered(title, selectedCategoryName)
+            List<ProductListMemberDto> products = _unitOfWork.Product.GetFiltered(title, selectedCategoryName, selectedRegionName, selectedPlatformName, (SortingOrder)orderLabels.IndexOf(selectedOrdering), minPrice, maxPrice)
                 .Select(ProductListMemberDto.MapProductToDto)
                 .ToList();
 
@@ -33,13 +36,21 @@ namespace GameHub.Controllers
                 .Select(CategoryDto.MapCategoryToDto)
                 .ToList();
 
-            return View((products, allCategories, title, selectedCategoryName, orderLabels));
+            List<RegionDto> allRegions = _unitOfWork.Region.GetAll()
+                .Select(RegionDto.MapRegionToDto)
+                .ToList();
+
+            List<PlatformDto> allPlatforms = _unitOfWork.Platform.GetAll()
+                .Select(PlatformDto.MapPlatformToDto)
+                .ToList();
+
+            return View((products, allCategories, allRegions, allPlatforms, orderLabels, title, selectedCategoryName, selectedRegionName, selectedPlatformName, selectedOrdering, minPrice, maxPrice));
         }
 
         public IActionResult DetailProduct(int id)
         {
             Debug.Print(id.ToString());
-            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Categories").ToList();
+            List<Product> products = _unitOfWork.Product.GetAll(includeProperties: "Categories,Platform").ToList();
             if (id != 0)
             {
                 Product product = products.Where(p => p.Id == id).First();                
