@@ -1,6 +1,7 @@
 ﻿@using GameHub.Controllers
 @model ShoppingCartDto
 <h1>Shopping Cart</h1>
+<br/>
 <form asp-controller="ShoppingCart" asp-action="Index" method="get">
     <div class="input-group">
        
@@ -13,6 +14,24 @@
     }
     else
     {
-        <p>The shopping cart is not empty</p>
+        @foreach (var obj in Model.Products)
+        {
+            <div class="row" style="display:flex; margin-left:10px; border-radius:7px; background-color: lightgray">
+                <div class="fw-bold col-3" style="margin:auto">@obj.ProductName</div>
+                <div class="col-3" style="margin:auto"> Quantity:  @obj.Quantity </div>
+                <div class="col-3" style="margin:auto"> Price: @obj.Price $ </div>
+                <div class="col-3" style="display: flex; justify-content: right;"> <a href="@Url.Action("DeleteProduct", "ShoppingCart", new { productId = @obj.Id })" class="btn btn-danger" role="button"style="margin-top:5px; margin-bottom:5px;"> Delete </a> </div>
+            </div>
+            <br/>
+        }
+        <br/>
+        <div style="border-radius:7px; background-color:#0d6efd; color:white; display:flex; justify-content: space-between;">
+            <div class="col-6" style="margin:auto">
+                Total: @Model.TotalPrice $
+            </div>
+            <div style="margin:5px">
+                <a class="btn btn-danger"> Pay </a>
+            </div>
+        </div>
     }
 </div>

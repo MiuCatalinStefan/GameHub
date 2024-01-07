@@ -50,7 +50,7 @@
                         <a  asp-controller="Product" 
                             asp-action="DetailProduct" 
                             asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
-                        <button class="btn btn-danger">Add to cart</button>
+                        <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = @obj.Id })" class="btn btn-danger" role="button">Add to cart</a>
                     </div>
                 </div>
             </div>

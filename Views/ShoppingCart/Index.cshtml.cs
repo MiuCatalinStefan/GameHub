@@ -6,6 +6,7 @@ namespace GameHub.Views.ShoppingCart
     {
         public void OnGet()
         {
+           
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using GameHub.Dto;
 using GameHub.Dto.DtoServices.IDtoServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GameHub.Controllers
 {
@@ -12,11 +13,81 @@ namespace GameHub.Controllers
         {
             _shoppingCart = shoppingCart;
         }
-        public IActionResult Index(string userId)
+        public IActionResult Index()
         {
-            ShoppingCartDto shoppingCart = _shoppingCart.Get(userId);
+            try
+            {
+                ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
+                if (claimsIdentity.IsAuthenticated == false)
+                {
+                    throw new ArgumentNullException("User not loged in!");
+                }
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            return View(shoppingCart);
+                ShoppingCartDto shoppingCart = _shoppingCart.Get(userId);
+
+                return View(shoppingCart);
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+        }
+
+        public IActionResult AddProduct(int productId)
+        {
+            ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity.IsAuthenticated == false)
+            {
+                throw new ArgumentNullException("User not loged in!");
+            }
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartDto shoppingCart = _shoppingCart.AddProduct(productId, userId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DeleteProduct(int productId)
+        {
+            ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity.IsAuthenticated == false)
+            {
+                throw new ArgumentNullException("User not loged in!");
+            }
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartDto shoppingCart = _shoppingCart.DeleteProduct(productId, userId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult IncreaseQuantity(int productId)
+        {
+            ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity.IsAuthenticated == false)
+            {
+                throw new ArgumentNullException("User not loged in!");
+            }
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartDto shoppingCart = _shoppingCart.IncreaseQuantity(productId, userId);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult DecreaseQuantity(int productId)
+        {
+            ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
+            if (claimsIdentity.IsAuthenticated == false)
+            {
+                throw new ArgumentNullException("User not loged in!");
+            }
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCartDto shoppingCart = _shoppingCart.DecreaseQuantity(productId, userId);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 

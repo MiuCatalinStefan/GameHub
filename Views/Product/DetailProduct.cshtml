@@ -62,7 +62,9 @@
                         }
                     </section>
                     <p class="card-text">100% positive feedback | <i class="bi bi-bag-check"></i> 342</p>
-                    <button type="button" class="btn btn-primary mb-2" @(Model.product.Stock == 0 ? "disabled" : "")>Add to cart</button>
+                    <a  class="btn btn-danger" role="button">Add to cart</a>
+                    <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = Model.product.Id })" class="btn btn-primary mb-2" @(Model.product.Stock == 0 ? "disabled" : "")>
+                        Add to cart</button>
                     <a href="#" class="btn btn-danger mb-2">Add to wishlist</a>
                     <button type="button" class="btn btn-outline-primary" @(Model.product.Stock == 0 ? "disabled" : "")>Buy now</button>
                  

@@ -25,7 +25,7 @@ namespace GameHub.Data
             modelBuilder.Entity<ShoppingCart>()
                .HasMany(t => t.Products)
                .WithOne(t => t.ShoppingCart)
-               .HasForeignKey(t => t.ProductId)
+               .HasForeignKey(t => t.ShoppingCartId)
                .IsRequired();
 
             modelBuilder.Entity<Product>()
