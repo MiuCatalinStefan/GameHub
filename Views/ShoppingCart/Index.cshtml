@@ -1,37 +1,75 @@
 ﻿@using GameHub.Controllers
 @model ShoppingCartDto
-<h1>Shopping Cart</h1>
-<br/>
-<form asp-controller="ShoppingCart" asp-action="Index" method="get">
-    <div class="input-group">
-       
+
+
+<h3 class="text-white mx-3">Shopping Cart</h3>
+@if (ViewBag.UserNotLoggedIn == false)
+{
+    <div class="cart-item m-3" role="alert">
+        <h4 class="alert-heading">Login Required!</h4>
+        <p>You need to be logged in to view the shopping cart. Please log in to proceed.</p>
+        <hr>
+        <a class="btn btn-primary btn-lg" href="@Url.Action("Login", "Account")" role="button">Login Here</a>
     </div>
-</form>
-<div>
-    @if (Model.Products.Any() == false)
-    {
-        <p>The shopping cart is empty!</p>
-    }
-    else
-    {
-        @foreach (var obj in Model.Products)
+}
+else
+{
+    <div class="container">
+        @if (!Model.Products.Any())
         {
-            <div class="row" style="display:flex; margin-left:10px; border-radius:7px; background-color: lightgray">
-                <div class="fw-bold col-3" style="margin:auto">@obj.ProductName</div>
-                <div class="col-3" style="margin:auto"> Quantity:  @obj.Quantity </div>
-                <div class="col-3" style="margin:auto"> Price: @obj.Price $ </div>
-                <div class="col-3" style="display: flex; justify-content: right;"> <a href="@Url.Action("DeleteProduct", "ShoppingCart", new { productId = @obj.Id })" class="btn btn-danger" role="button"style="margin-top:5px; margin-bottom:5px;"> Delete </a> </div>
-            </div>
-            <br/>
+            <div class="alert alert-info text-center">Your shopping cart is empty!</div>
         }
-        <br/>
-        <div style="border-radius:7px; background-color:#0d6efd; color:white; display:flex; justify-content: space-between;">
-            <div class="col-6" style="margin:auto">
-                Total: @Model.TotalPrice $
+        else
+        {
+            <div class="row">
+                <div class="col-md-8">
+                    @foreach (var obj in Model.Products)
+                    {
+                        <div class="cart-item">
+                            <div class="item-details d-flex justify-content-between align-items-center m-2">
+                                <img src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715" alt="@obj.ProductName" class="item-image">
+                                <div class="item-name">
+                                    <h5>@obj.ProductName</h5>
+                                    <p>description @* @obj.Description *@</p>
+                                </div>
+                                <div class="quantity-controls mr-4">
+                                    <button class="btn btn-link text-white">-</button>
+                                    <span>@obj.Quantity</span>
+                                    <button class="btn btn-link text-white">+</button>
+                                </div>
+                                <div class="mr-2">
+                                    <button class="btn btn-link text-white p-0"><i class="far fa-trash-alt"></i></button>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end align-items-center mt-3">
+                                <div class="price mr-2">
+                                    <h5>@obj.Price RON</h5>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-4">
+                    <div class="cart-summary">
+                        <h4>Summary</h4>
+                        <div class="mb-2 ">
+                            <span> Product</span>
+                            <span class="float-right">@Model.TotalPrice RON</span>
+                        </div>
+                        <div class="mb-3">
+                            <span>Total:</span>
+                            <span class="float-right">@Model.TotalPrice RON</span>
+                        </div>
+                        <button class="btn btn-block">Proceed to checkout</button>
+                    </div>
+                </div>
             </div>
-            <div style="margin:5px">
-                <a class="btn btn-danger"> Pay </a>
-            </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+
+}
+
+<!-- Optional: Include Bootstrap JS and its dependencies (if not already included in your layout) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>

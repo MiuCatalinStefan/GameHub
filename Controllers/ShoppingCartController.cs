@@ -20,7 +20,8 @@ namespace GameHub.Controllers
                 ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
                 if (claimsIdentity.IsAuthenticated == false)
                 {
-                    throw new ArgumentNullException("User not loged in!");
+                    ViewBag.UserNotLoggedIn = false;
+                    return View();
                 }
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
