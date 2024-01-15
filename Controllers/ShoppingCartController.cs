@@ -40,7 +40,8 @@ namespace GameHub.Controllers
             ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity.IsAuthenticated == false)
             {
-                throw new ArgumentNullException("User not loged in!");
+                ViewBag.UserNotLoggedIn = false;
+                return RedirectToAction(nameof(Index));
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -54,7 +55,8 @@ namespace GameHub.Controllers
             ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity.IsAuthenticated == false)
             {
-                throw new ArgumentNullException("User not loged in!");
+                ViewBag.UserNotLoggedIn = false;
+                return RedirectToAction(nameof(Index));
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -68,7 +70,8 @@ namespace GameHub.Controllers
             ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity.IsAuthenticated == false)
             {
-                throw new ArgumentNullException("User not loged in!");
+                ViewBag.UserNotLoggedIn = false;
+                return RedirectToAction(nameof(Index));
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
@@ -82,7 +85,8 @@ namespace GameHub.Controllers
             ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity.IsAuthenticated == false)
             {
-                throw new ArgumentNullException("User not loged in!");
+                ViewBag.UserNotLoggedIn = false;
+                return RedirectToAction(nameof(Index));
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 

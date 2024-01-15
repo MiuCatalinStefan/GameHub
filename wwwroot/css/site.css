@@ -11,6 +11,7 @@ html {
 
 body {
     background-color: #4B3F72;
+    color: white;
 }
 
 .cart-header {
@@ -64,4 +65,17 @@ body {
     background: none;
     border: none;
     color: white;
-}}
+}
+
+.btn-primary {
+    background-color: #8A2BE2;
+    border-color: #7c1fa2;
+}
+
+.btn-primary:hover {
+    background-color: #9b4bd8;
+}
+
+.form-label{
+    color:black;
+}

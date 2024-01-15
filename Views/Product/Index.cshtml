@@ -2,192 +2,294 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="your-script.js"></script>
+<style>
+    .container {
+        max-width: 1300px;
+    }
 
-<h2>Search for products</h2>
+    .filter-sidebar {
+        background-color: #32174d;
+        color: white;
+        padding: 20px;
+        max-height:550px;
+    }
 
-<form asp-controller="Product" asp-action="Index" method="get">
-    <div class="input-group">
-        <input id="titleInput" type="text" class="form-control w-50" placeholder="Title name" name="title" value="@Model.title" />
-        <input id="minPriceInput" type="text" name="minPrice" class="form-control form-icon-trailing" style="width: 4rem;" value="@Model.minPrice" placeholder="0" min="0" max="999" />
-        <input id="maxPriceInput" type="text" name="maxPrice" class="form-control form-icon-trailing" style="width: 4rem;" value="@Model.maxPrice" placeholder="999" min="0" max="999" />
-        <input id="submitBtn" class="btn btn-primary" type="submit" value="Filter" />
-    </div>
-    <div class="input-group mt-2">
-        <select id="categorySelect" name="selectedCategoryName" class="form-select" aria-label="Select category" style="width: 10rem;">
-            @if (Model.selectedCategoryName == "All Categories" || Model.selectedCategoryName == "")
-            {
-                <option selected>All Categories</option>
-            }
-            else
-            {
-                <option>All Categories</option>
-            }
-            @foreach (var category in Model.allCategories)
-            {
-                if (category.Name == Model.selectedCategoryName)
-                {
-                    <option value="@category.Name" selected>@category.Name</option>
-                }
-                else
-                {
-                    <option value="@category.Name">@category.Name</option>
-                }
-            }
-        </select>
-        <select id="regionSelect" name="selectedRegionName" class="form-select" aria-label="Select region" style="width: 10rem;">
-            @if (Model.selectedRegionName == "All Regions" || Model.selectedRegionName == "")
-            {
-                <option selected>All Regions</option>
-            }
-            else
-            {
-                <option>All Regions</option>
-            }
-            @foreach (var region in Model.allRegions)
-            {
-                if (region.Name == Model.selectedRegionName)
-                {
-                    <option value="@region.Name" selected>@region.Name</option>
-                }
-                else
-                {
-                    <option value="@region.Name">@region.Name</option>
-                }
-            }
-        </select>
-        <select id="platformSelect" name="selectedPlatformName" class="form-select" aria-label="Select platform" style="width: 10rem;">
-            @if (Model.selectedPlatformName == "All Platforms" || Model.selectedPlatformName == "")
-            {
-                <option selected>All Platforms</option>
-            }
-            else
-            {
-                <option>All Platforms</option>
-            }
-            @foreach (var platform in Model.allPlatforms)
-            {
-                if (platform.Name == Model.selectedPlatformName)
-                {
-                    <option value="@platform.Name" selected>@platform.Name</option>
-                }
-                else
-                {
-                    <option value="@platform.Name">@platform.Name</option>
-                }
-            }
-        </select>
-        <select id="orderSelect" name="selectedOrdering" class="form-select" aria-label="Select order" style="width: 10rem;">
-            @foreach (var order in Model.orderLabels)
-            {
-                if (order == Model.selectedOrdering)
-                {
-                    <option value="@order" selected>@order</option>
-                }
-                else
-                {
-                    <option value="@order">@order</option>
-                }
-            }
-        </select>
-    </div>
-    <script>
-        $(document).ready(function () {
-            if ($("#minPriceInput").val() == '') {
-                $("#minPriceInput").val(0);
-            }
+    .filter-sidebar h3 {
+        color: #fff;
+    }
 
-            if ($("#maxPriceInput").val() == '') {
-                $("#maxPriceInput").val(999);
-            }
+    .filter-sidebar .form-control {
+        background-color: #1c1c1e;
+        color: white;
+        border: none;
+    }
 
-            $("#minPriceInput").on('input', function (e) {
-                var val = $(this).val();
-                // Remove non-digits
-                val = val.replace(/[^0-9]/g, '');
-                // Remove leading zeros
-                val = val.replace(/^0+/, '');
-                $(this).val(val);
-            });
+    .filter-sidebar .form-select {
+        margin-bottom: 10px;
+    }
 
-            $("#maxPriceInput").on('input', function (e) {
-                var val = $(this).val();
-                // Remove non-digits
-                val = val.replace(/[^0-9]/g, '');
-                // Remove leading zeros
-                val = val.replace(/^0+/, '');
-                $(this).val(val);
-            });
+    .filter-form .input-group {
+        padding: 10px;
+        background-color: #343a40; 
+        border-radius: 5px;
+    }
 
-            $("#minPriceInput").on('blur', function () {
-                if ($(this).val() == '') {
-                    $(this).val(0);
-                }
+    .filter-form .form-control,
+    .filter-form .form-select {
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
 
-                $(this).val(
-                    Math.min($(this).val(), 999)
-                );
+  form .btn-primary {
+        background-color: #8a2be2;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        width:100%;
+    }
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        grid-gap: 20px;
+    }
 
-                $('#maxPriceInput').val(
-                    Math.max($(this).val(), $("#maxPriceInput").val())
-                );
-            });
+    .product-card {
+        background-color: #4a4a55;
+        color: white;
+        border: none;
+        transition: transform 0.2s ease-in-out;
+    }
 
-            $("#maxPriceInput").on('blur', function () {
-                if ($(this).val() == '') {
-                    $(this).val(999);
-                } else {
-                    $(this).val(
-                        Math.min(
-                            Math.max($(this).val(), $("#minPriceInput").val()),
-                            999
-                        )
-                    );
-                }
-            });
+    .product-card:hover {
+        transform: scale(1.05);
+    }
 
-            $("#categorySelect").change(function () {
-                $("#submitBtn").click();
-            });
+    .product-card img {
+        width: 100%;
+        height: 340px;
+        object-fit: cover;
+    }
 
-            $("#regionSelect").change(function () {
-                $("#submitBtn").click();
-            });
+    .product-card .card-body {
+        padding: 15px;
+    }
 
-            $("#platformSelect").change(function () {
-                $("#submitBtn").click();
-            });
+    .product-card .card-title {
+        color: #fff;
+    }
 
-            $("#orderSelect").change(function () {
-                $("#submitBtn").click();
-            });
-        });
-    </script>
-</form>
+    .product-card .card-text {
+        color: #ccc;
+    }
 
-<div class="row row-cols-3 justify-content-around gap-3 mt-4">
-    @foreach (var obj in Model.products)
-    {
-        <div class="card shadow-lg rounded-3" style="width: 20rem;">
-            <div class="p-3">
-                @if (obj.Image != null)
-                {
-                    <img class="card-img-top mt-3" src="@obj.Image?.ToString()" style="height: 16rem" />
-                }
-                else
-                {
-                    <img class="card-img-top mt-3" src="https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Money.PNG/Treasure_Chest_PNG_Transparent_Clipart.png?m=1612789715" style="height: 16rem" />
-                }
-                <div class="card-body">
-                    <h5 class="card-title fw-bold mb-0">@obj.Title</h5>
-                    <h6>@obj.Price.ToString("F2") $</h6>
-                    <div class="d-flex w-100 mb-2 justify-content-between">
-                        <a  asp-controller="Product" 
-                            asp-action="DetailProduct" 
-                            asp-route-id="@obj.Id" class="btn btn-primary">Description</a>
-                        <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = @obj.Id })" class="btn btn-danger" role="button">Add to cart</a>
-                    </div>
+    .product-card .btn-primary {
+        background-color: #8a2be2;
+        border: none;
+    }
+
+    .product-card .btn-danger {
+        background-color: #d52b1e;
+        border: none;
+    }
+</style>
+<h2 class="text-white">Search for products</h2>
+
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-3 filter-sidebar">
+            <h3>Filters</h3>
+
+            <form asp-controller="Product" asp-action="Index" method="get">
+                <label class="mt-1">Titile</label>
+                <input id="titleInput" type="text" class="form-control" placeholder="Title name" name="title" value="@Model.title" />
+                <label class="mt-1">Price Range</label>
+                <div class="input-group">
+                    <input id="minPriceInput" type="text" name="minPrice" class="form-control form-icon-trailing"  value="@Model.minPrice" placeholder="0" min="0" max="999" />
+                    <input id="maxPriceInput" type="text" name="maxPrice" class="form-control form-icon-trailing"  value="@Model.maxPrice" placeholder="999" min="0" max="999" />
                 </div>
+                
+                <div class="input-group mt-2">
+                    <select id="categorySelect" name="selectedCategoryName" class="form-select mt-2" aria-label="Select category" style="width: 10rem;">
+                        @if (Model.selectedCategoryName == "All Categories" || Model.selectedCategoryName == "")
+                        {
+                            <option selected>All Categories</option>
+                        }
+                        else
+                        {
+                            <option>All Categories</option>
+                        }
+                        @foreach (var category in Model.allCategories)
+                        {
+                            if (category.Name == Model.selectedCategoryName)
+                            {
+                                <option value="@category.Name" selected>@category.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+                        }
+                    </select>
+                    <select id="regionSelect" name="selectedRegionName" class="form-select mt-2" aria-label="Select region" style="width: 10rem;">
+                        @if (Model.selectedRegionName == "All Regions" || Model.selectedRegionName == "")
+                        {
+                            <option selected>All Regions</option>
+                        }
+                        else
+                        {
+                            <option>All Regions</option>
+                        }
+                        @foreach (var region in Model.allRegions)
+                        {
+                            if (region.Name == Model.selectedRegionName)
+                            {
+                                <option value="@region.Name" selected>@region.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@region.Name">@region.Name</option>
+                            }
+                        }
+                    </select>
+                    <select id="platformSelect" name="selectedPlatformName" class="form-select mt-2" aria-label="Select platform" style="width: 10rem;">
+                        @if (Model.selectedPlatformName == "All Platforms" || Model.selectedPlatformName == "")
+                        {
+                            <option selected>All Platforms</option>
+                        }
+                        else
+                        {
+                            <option>All Platforms</option>
+                        }
+                        @foreach (var platform in Model.allPlatforms)
+                        {
+                            if (platform.Name == Model.selectedPlatformName)
+                            {
+                                <option value="@platform.Name" selected>@platform.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@platform.Name">@platform.Name</option>
+                            }
+                        }
+                    </select>
+                    <select id="orderSelect" name="selectedOrdering" class="form-select mt-2" aria-label="Select order" style="width: 10rem;">
+                        @foreach (var order in Model.orderLabels)
+                        {
+                            if (order == Model.selectedOrdering)
+                            {
+                                <option value="@order" selected>@order</option>
+                            }
+                            else
+                            {
+                                <option value="@order">@order</option>
+                            }
+                        }
+                    </select>
+
+                </div>
+                <input id="submitBtn" class="btn btn-primary mt-2" type="submit" value="Filter" />
+
+                <script>
+                    $(document).ready(function () {
+                        if ($("#minPriceInput").val() == '') {
+                            $("#minPriceInput").val(0);
+                        }
+
+                        if ($("#maxPriceInput").val() == '') {
+                            $("#maxPriceInput").val(999);
+                        }
+
+                        $("#minPriceInput").on('input', function (e) {
+                            var val = $(this).val();
+                            // Remove non-digits
+                            val = val.replace(/[^0-9]/g, '');
+                            // Remove leading zeros
+                            val = val.replace(/^0+/, '');
+                            $(this).val(val);
+                        });
+
+                        $("#maxPriceInput").on('input', function (e) {
+                            var val = $(this).val();
+                            // Remove non-digits
+                            val = val.replace(/[^0-9]/g, '');
+                            // Remove leading zeros
+                            val = val.replace(/^0+/, '');
+                            $(this).val(val);
+                        });
+
+                        $("#minPriceInput").on('blur', function () {
+                            if ($(this).val() == '') {
+                                $(this).val(0);
+                            }
+
+                            $(this).val(
+                                Math.min($(this).val(), 999)
+                            );
+
+                            $('#maxPriceInput').val(
+                                Math.max($(this).val(), $("#maxPriceInput").val())
+                            );
+                        });
+
+                        $("#maxPriceInput").on('blur', function () {
+                            if ($(this).val() == '') {
+                                $(this).val(999);
+                            } else {
+                                $(this).val(
+                                    Math.min(
+                                        Math.max($(this).val(), $("#minPriceInput").val()),
+                                        999
+                                    )
+                                );
+                            }
+                        });
+
+                        $("#categorySelect").change(function () {
+                            $("#submitBtn").click();
+                        });
+
+                        $("#regionSelect").change(function () {
+                            $("#submitBtn").click();
+                        });
+
+                        $("#platformSelect").change(function () {
+                            $("#submitBtn").click();
+                        });
+
+                        $("#orderSelect").change(function () {
+                            $("#submitBtn").click();
+                        });
+                    });
+                </script>
+            </form>
+        </div>
+
+         <div class="col-md-9">
+              <div class="product-grid mx-5 mb-5">
+                @foreach (var product in Model.products)
+                {
+                  <div class="card product-card">
+                      <a asp-controller="Product" asp-action="DetailProduct" asp-route-id="@product.Id">
+                        @if (product.Image != null)
+                        {
+                            <img class="card-img-top" src="@product.Image?.ToString()" />
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="~/404.png" />
+                        }
+                        </a>
+                      <div class="card-body">
+                        <h5 class="card-title">@product.Title</h5>
+                        <p class="card-text">@product.Price.ToString("F2") RON</p>
+                        <div class="btn-group">
+                            <a asp-controller="Product" asp-action="DetailProduct" asp-route-id="@product.Id" class="btn btn-primary">View</a>
+                            <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = @product.Id })" class="btn btn-danger">Add to Cart</a>
+                        </div>
+                      </div>
+                  </div>
+                }
             </div>
         </div>
-    }
+    </div>
 </div>

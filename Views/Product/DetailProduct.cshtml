@@ -1,7 +1,209 @@
 ﻿@model (int id, ProductDto product, List<ProductDto> relatedProdcuts)
 
+<style>
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
 
-<div class="container-lg container-fluid mt-5">
+    .bg-dark-purple {
+        background-color: #2C2C34; /* Dark purple color */
+    }
+
+    .bg-light-purple {
+        background-color: #3E3E50; /* Light purple color */
+    }
+
+    .text-yellow {
+        color: #FFC107; /* Yellow text color */
+    }
+
+    .btn-yellow {
+        background-color: #FFC107; /* Yellow button color */
+        border-color: #FFC107;
+    }
+
+    .badge-purple {
+        background-color: #6C63FF; /* Purple badge color */
+    }
+
+    .product-image {
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .container-lg {
+        padding-top: 2rem;
+    }
+
+    .store-path {
+        color: #FFFFFF;
+    }
+
+    .store-path a {
+    color: #FFFFFF;
+    text-decoration: none;
+    }
+
+    .store-path a:hover {
+        text-decoration: underline;
+    }
+
+    .rating-stars {
+        color: #FFD700;
+    }
+
+    .price-tag {
+        color: #FFFFFF;
+        background-color: #FFC107;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        font-size: 1.25rem;
+    }
+
+    .card-promotion {
+        padding: 1rem;
+        background-color: #6C63FF;
+        color: #FFFFFF;
+        border: none;
+    }
+
+    .btn-buy-now {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .product-info-row {
+        background-color: #5c2d91; /* Purple background */
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 8px; /* Rounded corners */
+        margin-bottom: 10px; /* Spacing between each row */
+    }
+
+    .product-info-icon {
+        margin-right: 10px;
+        /* Style or replace with actual icons */
+    }
+
+    .product-info-text {
+        flex-grow: 1;
+    }
+
+    .product-detail-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+        .product-detail-list li {
+            margin-right: 10px; /* Spacing between items */
+        }
+</style>
+<div class="row"> 
+<div class="card bg-dark-purple text-white m-2 px-3 pb-5 col-8">
+    <div class="container-lg">
+        <div class="row">
+        <!-- Product Image -->
+        <div class="col-md-4 col-6 d-flex justify-content-center align-items-center">
+           <img class="product-image" src="@Model.product.Image?.ToString()" alt="@Model.product.Title">
+        </div>
+        <!-- Product Details -->
+        <div class="col-md-8 col-6">
+            <h2>@Model.product.Title</h2>
+            <div class="rating-stars">
+                <!-- Add your rating display logic here, example: -->
+                <span>★★★★☆</span> 4.18 / 5 from 11 ratings
+            </div>
+            <p class="mt-3">@Model.product.Description</p>
+            <!-- Additional details, e.g., region, platform, etc. -->
+            <div class="mt-4">
+                <span class="badge badge-success">@Model.product.Producer</span>
+                <span class="badge badge-info">@Model.product.Platform</span>
+                <span class="badge badge-warning">@Model.product.ReleaseDate</span>
+            </div>
+
+         </div>
+
+        </div>
+            <div class="product-info mt-4">
+                <div class="row">
+                    <div class="col-md-5 mx-2 product-info-row">
+                        <span class="product-info-icon">🔞</span>
+                        <span class="product-info-text"><strong>Minimum age:</strong> <span class="product-detail-badge">+@Model.product.RecomandedAge</span></span>
+                    </div>
+                    <div class="col-md-5 mx-2 product-info-row">
+                        <span class="product-info-icon">👥</span>
+                        <span class="product-info-text"><strong>Multiplayer:</strong> <span class="product-detail-badge">@Model.product.MultiplayerInfo</span></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 mx-2 product-info-row">
+                        <span class="product-info-icon">🌐</span>
+                        <div class="product-info-text">
+                            <strong>Available languages:</strong>
+                            @foreach (var lang in Model.product.AvailableLanguages)
+                            {
+                                <span class="badge bg-primary">@lang</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-5 mx-2 product-info-row">
+                        <span class="product-info-icon">📚</span>
+                        <div class="product-info-text">
+                            <strong>Categories:</strong>
+                            @if (Model.product.Categories.Any())
+                            {
+                                @foreach (var category in Model.product.Categories)
+                                {
+                                    <span class="badge bg-danger ">@category</span>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+</div>
+<div class="card card-promotion m-2 col-3">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <p class="m-0">Promoted Offer</p>
+            <div class="price-tag">@Model.product.Price RON</div>
+        </div>
+        <div>
+            <button class="btn btn-yellow btn-buy-now">Buy now</button>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Related Products or Other Offers -->
+<div class="row mt-5">
+    <h3>4 other offers</h3>
+    <!-- Iterate through related products -->
+    @foreach (var relatedProduct in Model.relatedProdcuts)
+    {
+        <div class="col-md-3 mt-3">
+            <div class="card bg-light-purple text-white">
+                <div class="card-body">
+                    <h5 class="card-title">@relatedProduct.Title</h5>
+                    <p class="card-text">@relatedProduct.Description</p>
+                    <div class="d-flex justify-content-between">
+                        <span class="badge badge-purple">@relatedProduct.Price RON</span>
+                        <button class="btn btn-yellow">Add to cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@* <div class="container-lg container-fluid mt-5">
     <div class="row">
         <div class="col-4 d-flex justify-content-center">
             <img class="mt-3 mb-3" src="@Model.product.Image?.ToString()" style="height: 25rem; width: 20rem;">
@@ -226,6 +428,6 @@
         }
     </div>
 
-</div>
+</div> *@
 
 
