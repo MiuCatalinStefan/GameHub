@@ -275,8 +275,10 @@ namespace GameHub.DtoServices
                         FullName = $"{applicationUser.FirstName ?? ""} {applicationUser.LastName ?? ""}".Trim(),
                         StreetAddress = applicationUser.StreetAddress,
                         City = applicationUser.City,
-                        State = applicationUser.State
-                    };
+                        State = applicationUser.State,
+                        PostalCode= applicationUser.ZipCode,
+                        Email=applicationUser.Email
+                };
             }
 
             return cart;

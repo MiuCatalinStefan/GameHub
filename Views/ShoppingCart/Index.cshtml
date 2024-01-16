@@ -9,7 +9,7 @@
         <h4 class="alert-heading">Login Required!</h4>
         <p>You need to be logged in to view the shopping cart. Please log in to proceed.</p>
         <hr>
-        <a class="btn btn-primary btn-lg" href="@Url.Action("Login", "Account")" role="button">Login Here</a>
+        <a class="btn btn-primary btn-lg" asp-area="Identity" asp-page="/Account/Login" role="button">Login Here</a>
     </div>
 }
 else

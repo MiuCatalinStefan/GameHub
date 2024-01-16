@@ -66,6 +66,7 @@
         background-color: #6C63FF;
         color: #FFFFFF;
         border: none;
+        max-height:30vh;
     }
 
     .btn-buy-now {
@@ -172,21 +173,17 @@
 
 </div>
 <div class="card card-promotion m-2 col-3">
-    <div class="d-flex justify-content-between align-items-center">
-        <div>
-            <p class="m-0">Promoted Offer</p>
-                <div class="price-tag">@Model.product.Price.ToString("c")</div>
-        </div>
-        <div>
-            <button class="btn btn-yellow btn-buy-now">Buy now</button>
-        </div>
+        <div class="d-flex flex-column justify-content-between align-items-center">
+    
+            <h3 class="m-0">Promoted Offer</h3>
+             <div class="price-tag">@Model.product.Price.ToString("c")</div>
+            <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = Model.product.Id })"  class="btn btn-yellow btn-buy-now">Buy now</a>
+        
     </div>
 </div>
 </div>
-<!-- Related Products or Other Offers -->
 <div class="row mt-5">
-    <h3>4 other offers</h3>
-    <!-- Iterate through related products -->
+    <h3>Similar Offers</h3>
     @foreach (var relatedProduct in Model.relatedProdcuts)
     {
         <div class="col-md-3 mt-3">
@@ -196,7 +193,7 @@
                     <p class="card-text">@relatedProduct.Description</p>
                     <div class="d-flex justify-content-between">
                         <span class="badge badge-purple">@relatedProduct.Price.ToString("c")</span>
-                        <button class="btn btn-yellow">Add to cart</button>
+                        <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = @relatedProduct.Id })" class="btn btn-yellow">Add to cart</a>
                     </div>
                 </div>
             </div>
