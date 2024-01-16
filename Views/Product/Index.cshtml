@@ -281,7 +281,7 @@
                         </a>
                       <div class="card-body">
                         <h5 class="card-title">@product.Title</h5>
-                        <p class="card-text">@product.Price.ToString("F2") RON</p>
+                        <p class="card-text">@product.Price.ToString("C")</p>
                         <div class="btn-group">
                             <a asp-controller="Product" asp-action="DetailProduct" asp-route-id="@product.Id" class="btn btn-primary">View</a>
                             <a href="@Url.Action("AddProduct", "ShoppingCart", new { productId = @product.Id })" class="btn btn-danger">Add to Cart</a>

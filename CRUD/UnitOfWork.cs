@@ -1,4 +1,6 @@
-﻿using GameHub.CRUD.CategoriesCRUD;
+﻿using GameHub.CRUD.ApplicationUsersCRUD;
+using GameHub.CRUD.OrdersCRUD;
+using GameHub.CRUD.CategoriesCRUD;
 using GameHub.CRUD.PlatformsCRUD;
 using GameHub.CRUD.ProductsCRUD;
 using GameHub.CRUD.RegionsCRUD;
@@ -11,8 +13,10 @@ namespace GameHub.CRUD
     {
         private ApplicationDbContext _db;
         public ICategoryCRUD Category { get; private set; }
+        public IOrderCRUD Order { get; private set; }
+        public IOrderProductsCRUD OrderProducts { get; private set; }
 
-        public IRegionCRUD Region { get; private set; }
+		public IRegionCRUD Region { get; private set; }
 
         public IPlatformCRUD Platform { get; private set; }
 
@@ -21,6 +25,7 @@ namespace GameHub.CRUD
         public IShoppingCartCRUD ShoppingCart { get; private set; }
 
         public IShoppingCartProductCRUD ShoppingCartProduct { get; private set; }
+        public IApplicationUserCRUD ApplicationUser { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -31,7 +36,11 @@ namespace GameHub.CRUD
             Product = new ProductCRUD(_db);
             ShoppingCart = new ShoppingCartCRUD(_db);
             ShoppingCartProduct = new ShoppingCartProductCRUD(_db);
-        }
+			OrderProducts= new OrderProductsCRUD(_db);
+			Order= new OrderCRUD(_db);
+			ApplicationUser= new ApplicationUserCRUD(_db);
+
+		}
 
         public void Save()
         {

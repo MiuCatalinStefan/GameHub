@@ -1,0 +1,17 @@
+﻿@model int
+
+@{
+    ViewBag.Title = "Order Confirmation";
+}
+
+<h2>Order Confirmation</h2>
+
+<div class="order-confirmation">
+    <h3>Thank you!</h3>
+    <p>Your order has been placed successfully.</p>
+    
+    
+    <div class="actions">
+        <a href="@Url.Action("Index", "Product")" class="btn btn-primary">Continue Shopping</a>
+    </div>
+</div>

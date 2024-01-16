@@ -2,8 +2,8 @@
 using GameHub.CRUD.CategoriesCRUD;
 using GameHub.Data;
 using GameHub.Dto;
-using GameHub.Dto.DtoServices;
-using GameHub.Dto.DtoServices.IDtoServices;
+using GameHub.DtoServices;
+using GameHub.DtoServices.IDtoServices;
 using GameHub.Models;
 using Microsoft.EntityFrameworkCore;
 using Moq;

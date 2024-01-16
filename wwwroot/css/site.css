@@ -36,7 +36,7 @@ body {
     color: white;
 }
 
-.cart-summary button {
+.cart-summary a {
     background-color: #FEC260;
     border: none;
     padding: 10px 20px;

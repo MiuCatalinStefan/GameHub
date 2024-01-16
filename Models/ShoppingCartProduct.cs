@@ -20,5 +20,7 @@ namespace GameHub.Models
         public int ProductId { get; set; }
         public Product Product { get; set; } 
         public int Quantity { get; set; } = 1;
+        public string Description { get; set; }
+        public Uri? Image { get; set; }
     }
 }

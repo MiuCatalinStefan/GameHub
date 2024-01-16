@@ -1,11 +1,12 @@
-﻿using GameHub.Data;
+﻿using GameHub.CRUD.ApplicationUsersCRUD;
+using GameHub.Data;
 using GameHub.Models;
 using System.Linq.Expressions;
 
 namespace GameHub.CRUD.CategoriesCRUD
 {
-    public class CategoryCRUD : RepoCRUD<Category>,ICategoryCRUD
-    {
+    public class CategoryCRUD : RepoCRUD<Category>, ICategoryCRUD
+	{
         private readonly ApplicationDbContext _db;
         public CategoryCRUD(ApplicationDbContext db):base(db) {
             _db = db;

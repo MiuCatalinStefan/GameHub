@@ -1,5 +1,8 @@
-﻿using GameHub.Dto;
-using GameHub.Dto.DtoServices.IDtoServices;
+﻿using GameHub.CRUD;
+using GameHub.Dto;
+using GameHub.DtoServices.IDtoServices;
+using GameHub.Models;
+using GameHub.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -8,10 +11,14 @@ namespace GameHub.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly IServiceShoppingCart _shoppingCart;
+        private readonly IUnitOfWork _unitOfWork;
+		[BindProperty]
+		public ShoppingCartDto shoppingCart { get; set; }
 
-        public ShoppingCartController(IServiceShoppingCart shoppingCart)
+		public ShoppingCartController(IServiceShoppingCart shoppingCart, IUnitOfWork unitOfWork)
         {
             _shoppingCart = shoppingCart;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
@@ -25,7 +32,7 @@ namespace GameHub.Controllers
                 }
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-                ShoppingCartDto shoppingCart = _shoppingCart.Get(userId);
+                 shoppingCart = _shoppingCart.Get(userId);
 
                 return View(shoppingCart);
             } catch(Exception ex)
@@ -34,8 +41,43 @@ namespace GameHub.Controllers
                 return null;
             }
         }
+		public IActionResult Checkout()
+		{
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(userId))
+			{
+				ViewBag.IsUserAuthenticated = false;
+				return View();
+			}
 
-        public IActionResult AddProduct(int productId)
+			var shoppingCart = _shoppingCart.PrepareCheckout(userId);
+			return View(shoppingCart);
+		}
+
+		[HttpPost]
+		[ActionName("Checkout")]
+		public IActionResult CheckoutPOST()
+		{
+			var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+			if (string.IsNullOrEmpty(userId))
+			{
+				ViewBag.UserNotLoggedIn = false;
+				return View();
+			}
+
+			Stripe.Checkout.Session session = _shoppingCart.CompleteCheckout(shoppingCart, userId);
+
+			Response.Headers.Add("Location", session.Url);
+			return new StatusCodeResult(303);
+		}
+	
+
+	public IActionResult OrderConfirmation(int id)
+        {
+            _shoppingCart.PostProcessOrder(id);
+			return View(id);
+        }
+		public IActionResult AddProduct(int productId)
         {
             ClaimsIdentity claimsIdentity = (ClaimsIdentity)User.Identity;
             if (claimsIdentity.IsAuthenticated == false)
@@ -45,7 +87,7 @@ namespace GameHub.Controllers
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartDto shoppingCart = _shoppingCart.AddProduct(productId, userId);
+             shoppingCart = _shoppingCart.AddProduct(productId, userId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -60,7 +102,7 @@ namespace GameHub.Controllers
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartDto shoppingCart = _shoppingCart.DeleteProduct(productId, userId);
+             shoppingCart = _shoppingCart.DeleteProduct(productId, userId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -75,7 +117,7 @@ namespace GameHub.Controllers
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartDto shoppingCart = _shoppingCart.IncreaseQuantity(productId, userId);
+             shoppingCart = _shoppingCart.IncreaseQuantity(productId, userId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -90,7 +132,7 @@ namespace GameHub.Controllers
             }
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            ShoppingCartDto shoppingCart = _shoppingCart.DecreaseQuantity(productId, userId);
+             shoppingCart = _shoppingCart.DecreaseQuantity(productId, userId);
 
             return RedirectToAction(nameof(Index));
         }

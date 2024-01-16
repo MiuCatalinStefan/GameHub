@@ -16,8 +16,10 @@ namespace GameHub.Data
       
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartProduct> ShoppingCartProducts { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<OrderProducts> OrderProducts { get; set; }
 
-        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
